@@ -98,9 +98,7 @@ if [ ! -z "$lon" -a ! -z "$lat" ]; then
         echo "GPS Data: $gps_result"
 
         echo "Running iPerf test"
-        iperf_result=`$iperf_bin -c $iperf_server -r -t $iperf_test_interval --reportstyle C &`
-	iperf_pid=$!
-	echo "iPerf running PID $iperf_pid..."
+        iperf_result=`$iperf_bin -c $iperf_server -r -t $iperf_test_interval --reportstyle C`
 
         iperf_result_client=$(echo "$iperf_result" | head -1)
         iperf_result_server=$(echo "$iperf_result" | tail -1)
