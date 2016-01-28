@@ -55,6 +55,13 @@ if [ -z $1 -a -z $2 ]; then
         exit 1
 fi
 
+# Verify that the iPerf server is alive
+ping -c 1 -w 5 $1 > /dev/null
+if [ $? -ne 0 ]; then
+        echo "iPerf server $1 is down!"
+        exit 1
+fi
+
 export_file_timestamp=`date +%Y-%m-%dT%H:%M:%S%z`
 export_file_name="$1-$2-$export_file_timestamp.csv"
 
