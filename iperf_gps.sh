@@ -18,6 +18,9 @@ iperf_time=5
 # Location of gpspipe binary
 gpspipe_bin="/usr/bin/gpspipe"
 
+# Location of gpsd PID
+gpsd_pid_file="/var/run/gpsd.pid"
+
 # --------------------------------------------------------------------------------
 # Do not change any settings below this line
 
@@ -30,6 +33,18 @@ fi
 # Verify if gpspipe is installed
 if [ ! -x $gpspipe_bin ]; then
         echo -e "\ngpspipe binary not found or is not executable!\n";
+        exit 1
+fi
+
+# Verify if gpsd is running
+if [ -e $gpsd_pid_file ]; then
+        gpsd_pid=`cat $gpsd_pid_file`
+        if [ ! -e /proc/$gpsd_pid/exe ]; then
+                echo "GPSD is not running, please make sure to start it!"
+                exit 1
+        fi
+else
+        echo "Cannot find GPSD PID file!"
         exit 1
 fi
 
