@@ -9,9 +9,6 @@ update_interval=10
 # Location of iPerf binary
 iperf_bin="/usr/bin/iperf"
 
-# iPerf server to connect to
-iperf_server="$1"
-
 # How long to run the iPerf test
 iperf_time=5
 
@@ -23,6 +20,9 @@ gpsd_pid_file="/var/run/gpsd.pid"
 
 # --------------------------------------------------------------------------------
 # Do not change any settings below this line
+
+# iPerf server to connect to
+iperf_server="$1"
 
 # Verify if iPerf is installed
 if [ ! -x $iperf_bin ]; then
