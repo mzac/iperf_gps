@@ -62,27 +62,33 @@ if [ $? -ne 0 ]; then
         exit 1
 fi
 
+# Set the timestamp and filename for the exported data
 export_file_timestamp=`date +%Y-%m-%dT%H:%M:%S%z`
 export_file_name="$1-$2-$export_file_timestamp.csv"
 
+# Verify if the export file already exists
 if [ ! -e "$export_file_name" ]; then
         touch "$export_file_name"
 fi
 
+# Verify that we can write to the export file
 if [ ! -w "$export_file_name" ]; then
         echo "Cannot write to $export_file_name"
         exit 1
 fi
 
+# Print CSV header to console
 echo "date,time,longitude,latitude,altitude,speed,track,iperf_server,iperf_test_interval,iperf_client_bytes,iperf_client_bps,iperf_server_bytes,iperf_server_bps" >> $export_file_name
 
 echo -e "\nAt any time, press CRTL-C to stop the script"
 echo -e "Writing to $export_file_name\n"
 echo -e "GPS Data: time,lon,lat,alt,spd,track\n"
 
+# Start the loop
 while true
 do
 
+# Get GPS Data in JSON format from gpsd
 tpv=$($gpspipe_bin -w -n 5 | grep -m 1 TPV | python -mjson.tool)
 lon=$(echo "$tpv" | grep "lon" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
 lat=$(echo "$tpv" | grep "lat" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
@@ -115,6 +121,7 @@ if [ ! -z "$lon" -a ! -z "$lat" ]; then
                 track=0
         fi
 
+        # Create GPS result string
         gps_result="$gps_date,$gps_time,$lon,$lat,$alt,$spd,$track"
 
         echo "GPS Data: $gps_result"
@@ -142,6 +149,7 @@ fi
 echo -e "Sleeping for $update_interval seconds...\n"
 sleep $update_interval
 
+# Clear all vars
 unset tpv
 unset lat
 unset lon
