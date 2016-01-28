@@ -10,7 +10,7 @@ update_interval=10
 iperf_bin="/usr/bin/iperf"
 
 # iPerf server to connect to
-iperf_server="10.0.0.10"
+iperf_server="$1"
 
 # How long to run the iPerf test
 iperf_time=5
@@ -33,15 +33,15 @@ if [ ! -x $gpspipe_bin ]; then
         exit 1
 fi
 
-# Verify that the base filename for output is specified
-if [ -z $1 ]; then
+# Verify that the iPerf server and base filename for output is specified
+if [ -z $1 -a -z $2 ]; then
         echo -e "\nUsage:"
-        echo -e "$0 <base_filename>\n"
+        echo -e "$0 <server_ip> <base_filename>\n"
         exit 1
 fi
 
 export_file_timestamp=`date +%Y-%m-%dT%H:%M:%S%z`
-export_file_name="$1-$export_file_timestamp.csv"
+export_file_name="$1-$2-$export_file_timestamp.csv"
 
 if [ ! -e "$export_file_name" ]; then
         touch "$export_file_name"
