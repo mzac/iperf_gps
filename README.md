@@ -13,6 +13,9 @@ This script lets you run iPerf from a Linux computer to a remote iPerf server wh
 ### Debian install:
 ```
 apt-get install gpsd gpsd-clients iperf
+git clone https://github.com/mzac/iperf_gps.git
+cd iperf_gps
+chmod a+x iperf_gps.sh
 ```
 
 ## Example:
