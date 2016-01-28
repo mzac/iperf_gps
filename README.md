@@ -21,7 +21,7 @@ chmod a+x iperf_gps.sh
 ## Example:
 
 ```
-root@pi:~# ./iperf_gps.sh vehicle1
+root@pi:~# ./iperf_gps.sh 10.0.0.10 vehicle1
 
 At any time, press CRTL-C to stop the script
 Writing to vehicle1-2016-01-28T17:42:35+0000.csv
