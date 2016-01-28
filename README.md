@@ -24,7 +24,7 @@ chmod a+x iperf_gps.sh
 root@pi:~# ./iperf_gps.sh 10.0.0.10 vehicle1
 
 At any time, press CRTL-C to stop the script
-Writing to vehicle1-2016-01-28T17:42:35+0000.csv
+Writing to 10.0.0.10-vehicle1-2016-01-28T17:42:35+0000.csv
 ```
 
 Once you start the script, it will verify if there is a GPS position, and if so will then run iPerf tests
