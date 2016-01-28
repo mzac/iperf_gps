@@ -1,18 +1,18 @@
 #!/bin/bash
 
-# How many seconds to run the iperf test
+# How many seconds to run the iPerf test
 iperf_test_interval=5
 
 # How many seconds to sleep between tests
 update_interval=10
 
-# Location of iperf binary
+# Location of iPerf binary
 iperf_bin="/usr/bin/iperf"
 
-# Iperf server to connect to
+# iPerf server to connect to
 iperf_server="10.0.0.10"
 
-# How long to run the iperf test
+# How long to run the iPerf test
 iperf_time=5
 
 # Location of gpspipe binary
@@ -21,9 +21,9 @@ gpspipe_bin="/usr/bin/gpspipe"
 # --------------------------------------------------------------------------------
 # Do not change any settings below this line
 
-# Verify if iperf is installed
+# Verify if iPerf is installed
 if [ ! -x $iperf_bin ]; then
-        echo -e "\niperf binary not found or is not executable!\n";
+        echo -e "\niPerf binary not found or is not executable!\n";
         exit 1
 fi
 
@@ -97,8 +97,10 @@ if [ ! -z "$lon" -a ! -z "$lat" ]; then
 
         echo "GPS Data: $gps_result"
 
-        echo "Running iperf test"
-        iperf_result=`$iperf_bin -c $iperf_server -r -t $iperf_test_interval --reportstyle C`
+        echo "Running iPerf test"
+        iperf_result=`$iperf_bin -c $iperf_server -r -t $iperf_test_interval --reportstyle C &`
+	iperf_pid=$!
+	echo "iPerf running PID $iperf_pid..."
 
         iperf_result_client=$(echo "$iperf_result" | head -1)
         iperf_result_server=$(echo "$iperf_result" | tail -1)
