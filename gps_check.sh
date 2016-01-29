@@ -51,9 +51,9 @@ do
         echo -e "Time:\t\t$gps_time"
         echo -e "Longitude:\t$lon"
         echo -e "Latitude:\t$lat"
-        echo -e "Altitude:\t$alt"
-        echo -e "Speed:\t\t$spd"
-        echo -e "Track:\t\t$track"
+        echo -e "Altitude:\t$alt Meters"
+        echo -e "Speed:\t\t$spd km/h"
+        echo -e "Track:\t\t$track Degrees"
 
         echo -e "Sleeping for $update_interval seconds..."
         echo "--------------------------------------------------------------------------------"
