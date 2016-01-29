@@ -150,13 +150,13 @@ do
                 fi
 
                 # Print GPS Results
-                echo -e "\nGPS Date:\t\t\t$gps_date"
-                echo -e "GPS Time:\t\t\t$gps_time"
+                echo -e "\nGPS Date:\t\t$gps_date"
+                echo -e "GPS Time:\t\t$gps_time"
                 echo -e "GPS Longitude:\t\t$lon"
                 echo -e "GPS Latitude:\t\t$lat"
-                echo -e "GPS Altitude:\t\t$alt"
-                echo -e "GPS Speed:\t\t\t$spd"
-                echo -e "GPSTrack:\t\t\t$track\n"
+                echo -e "GPS Altitude:\t\t$alt Meters"
+                echo -e "GPS Speed:\t\t$spd km/h"
+                echo -e "GPS Track:\t\t$track Degrees\n"
 
                 # Verify that the iPerf server is alive with ICMP, if not skip iperf test and set results to zero
                 echo -en "NOTE: Check if server is still alive..."
