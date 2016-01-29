@@ -58,10 +58,10 @@ else
         iperf_server="$1"
 fi
 
-echo "--------------------------------------------------------------------------------"
+echo "\n--------------------------------------------------------------------------------"
 
 # Verify that the iPerf server is alive with ICMP
-echo -ne "\nNOTE: Running ICMP ping to see if server is alive..."
+echo -ne "NOTE: Running ICMP ping to see if server is alive..."
 /bin/ping -n -c 1 -w 5 $iperf_server > /dev/null
 if [ $? -ne 0 ]; then
         echo "ERROR: iPerf server $iperf_server is down - via ICMP ping!"
