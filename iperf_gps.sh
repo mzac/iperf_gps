@@ -102,10 +102,10 @@ echo -e "NOTE: Writing CSV data to $export_file_name"
 echo "--------------------------------------------------------------------------------"
 
 # Print CSV header to file
-echo "date,time,longitude,latitude,altitude,speed,track,iperf_server,ping_min,ping_avg,ping_max,ping_mdev,iperf_test_interval,iperf_client_bytes,iperf_client_bps,iperf_server_bytes,iperf_server_bps" > $export_file_name
+echo "test_id,date,time,longitude,latitude,altitude,speed,track,iperf_server,ping_min,ping_avg,ping_max,ping_mdev,iperf_test_interval,iperf_client_bytes,iperf_client_bps,iperf_server_bytes,iperf_server_bps" > $export_file_name
 
 # Set test_id to zero
-test_id=0
+test_id=1
 
 # Start the loop
 while true
@@ -145,7 +145,7 @@ do
                 fi
                 
                 if [ $spd -le 1 ]; then
-                        echo "WARNING: Not moving - setting to 0"
+                        echo "WARNING: Not moving - setting track to 0"
                         track=0
                 fi
 
@@ -191,7 +191,7 @@ do
                         echo -e "\nNOTE: Running iPerf test..."
                         iperf_result=`$iperf_bin -c $iperf_server -r -t $iperf_test_interval --reportstyle C`
 
-                        echo "Ok\n"
+                        echo -e "Ok\n"
 
                         iperf_result_client=$(echo "$iperf_result" | head -1)
                         iperf_result_server=$(echo "$iperf_result" | tail -1)
@@ -208,7 +208,7 @@ do
                         echo -e "iPerf Server BPS\t$iperf_result_server_bps"
                 fi
                 echo -ne "\nNOTE: Writing results to file..."
-                echo "$gps_date,$gps_time,$lon,$lat,$alt,$spd,$track,$iperf_server,$ping_result_min,$ping_result_avg,$ping_result_max,$ping_result_mdev,$iperf_test_interval,$iperf_result_client_bytes,$iperf_result_client_bps,$iperf_result_server_bytes,$iperf_result_server_bps" >> $export_file_name
+                echo "$test_id,$gps_date,$gps_time,$lon,$lat,$alt,$spd,$track,$iperf_server,$ping_result_min,$ping_result_avg,$ping_result_max,$ping_result_mdev,$iperf_test_interval,$iperf_result_client_bytes,$iperf_result_client_bps,$iperf_result_server_bytes,$iperf_result_server_bps" >> $export_file_name
                 if [ $? -eq 0 ]; then
                         echo "Ok"
                         ((test_id++))
