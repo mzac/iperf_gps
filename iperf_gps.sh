@@ -24,18 +24,15 @@ gpsd_pid_file="/var/run/gpsd.pid"
 # --------------------------------------------------------------------------------
 # Do not change any settings below this line
 
-# iPerf server to connect to
-iperf_server="$1"
-
 # Verify if iPerf is installed
 if [ ! -x $iperf_bin ]; then
-        echo -e "\niPerf binary not found or is not executable!\n";
+        echo -e "\nERROR: iPerf binary not found or is not executable!\n";
         exit 1
 fi
 
 # Verify if gpspipe is installed
 if [ ! -x $gpspipe_bin ]; then
-        echo -e "\ngpspipe binary not found or is not executable!\n";
+        echo -e "\nERROR: gpspipe binary not found or is not executable!\n";
         exit 1
 fi
 
@@ -43,11 +40,11 @@ fi
 if [ -e $gpsd_pid_file ]; then
         gpsd_pid=`cat $gpsd_pid_file`
         if [ ! -e /proc/$gpsd_pid/exe ]; then
-                echo "GPSD is not running, please make sure to start it!"
+                echo "ERROR: GPSD is not running, please make sure to start it!"
                 exit 1
         fi
 else
-        echo "Cannot find GPSD PID file!"
+        echo "ERROR: Cannot find GPSD PID file!"
         exit 1
 fi
 
@@ -56,22 +53,29 @@ if [ -z $1 -a -z $2 ]; then
         echo -e "\nUsage:"
         echo -e "$0 <server_ip> <base_filename>\n"
         exit 1
+else
+        # iPerf server to connect to
+        iperf_server="$1"
 fi
 
 # Verify that the iPerf server is alive with ICMP
-echo "Running ICMP test to see if server is alive..."
+echo -ne "\nRunning ICMP test to see if server is alive..."
 /bin/ping -n -c 1 -w 5 $iperf_server > /dev/null
 if [ $? -ne 0 ]; then
-        echo "iPerf server $iperf_server is down - via ICMP ping!"
+        echo "ERROR: iPerf server $iperf_server is down - via ICMP ping!"
         exit 1
+else
+        echo "Ok"
 fi
 
 # Verify that the iPerf server is up
 echo "Running nc test to see if iPerf is up on server..."
 /bin/nc -z -v -w 5 $iperf_server $iperf_port 2> /dev/null
 if [ $? -ne 0 ]; then
-        echo "iPerf server $iperf_server on port $iperf_port is down!"
+        echo "ERROR: iPerf server $iperf_server on port $iperf_port is down!"
         exit 1
+else
+        echo "Ok"
 fi
 
 # Set the timestamp and filename for the exported data
@@ -89,10 +93,11 @@ if [ ! -w "$export_file_name" ]; then
         exit 1
 fi
 
-# Print CSV header to console and file
-echo "date,time,longitude,latitude,altitude,speed,track,iperf_server,ping_min,ping_avg,ping_max,ping_mdev,iperf_test_interval,iperf_client_bytes,iperf_client_bps,iperf_server_bytes,iperf_server_bps" | tee -a $export_file_name
+# Print CSV header to file
+echo "date,time,longitude,latitude,altitude,speed,track,iperf_server,ping_min,ping_avg,ping_max,ping_mdev,iperf_test_interval,iperf_client_bytes,iperf_client_bps,iperf_server_bytes,iperf_server_bps" >> $export_file_name
 
-echo -e "\nAt any time, press CRTL-C to stop the script"
+echo "--------------------------------------------------------------------------------"
+
 echo -e "Writing to $export_file_name\n"
 echo -e "GPS Data: date,time,longitude,latitude,altitude,speed,track\n"
 
