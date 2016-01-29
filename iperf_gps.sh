@@ -92,33 +92,32 @@ echo "date,time,longitude,latitude,altitude,speed,track,iperf_server,iperf_test_
 
 echo -e "\nAt any time, press CRTL-C to stop the script"
 echo -e "Writing to $export_file_name\n"
-echo -e "GPS Data: time,lon,lat,alt,spd,track\n"
+echo -e "GPS Data: date,time,longitude,latitude,altitude,speed,track\n"
 
 # Start the loop
 while true
 do
         # Get GPS Data in JSON format from gpsd
         tpv=$($gpspipe_bin -w -n 5 | grep -m 1 TPV | python -mjson.tool)
+        gps_date=$(echo "$tpv" | grep "time" | cut -d: -f2 | cut -dT -f1 | cut -d, -f1 | tr -d ' ' | tr -d '"')
+        gps_time=$(echo "$tpv" | grep "time" | cut -dT -f2 | cut -d. -f1 | cut -d, -f1 | tr -d ' ')
         lon=$(echo "$tpv" | grep "lon" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
         lat=$(echo "$tpv" | grep "lat" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
         alt=$(echo "$tpv" | grep "alt" | cut -d: -f2 | cut -d, -f1 | tr -d ' ' | awk '{print int($1)}')
         spd=$(echo "$tpv" | grep "speed" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
         track=$(echo "$tpv" | grep "track" | cut -d: -f2 | cut -d, -f1 | tr -d ' ' | awk '{print int($1)}')
-        gps_date=$(echo "$tpv" | grep "time" | cut -d: -f2 | cut -dT -f1 | cut -d, -f1 | tr -d ' ' | tr -d '"')
-        gps_time=$(echo "$tpv" | grep "time" | cut -dT -f2 | cut -d. -f1 | cut -d, -f1 | tr -d ' ')
 
         # Convert speed from meters per second to kilometers per hour
         spd=`echo $spd | awk '{print int($1 * 3.6)}'`
 
         # Check if lon and lat are set
         if [ ! -z "$lon" -a ! -z "$lat" ]; then
-
                 if [ -z "$alt" ]; then
                         echo "No alt - setting to 0"
                         alt=0
                 fi
                 if [ -z "$spd" ]; then
-                        echo "No speed - setting to 0"
+                        echo "No speed - setting to 0
                         spd=0
                 fi
                 if [ -z "$track" ]; then
@@ -133,25 +132,37 @@ do
                 # Create GPS result string
                 gps_result="$gps_date,$gps_time,$lon,$lat,$alt,$spd,$track"
 
+                # Print GPS data received from gpsd
                 echo "GPS Data: $gps_result"
 
-                echo "Running iPerf test"
-                iperf_result=`$iperf_bin -c $iperf_server -r -t $iperf_test_interval --reportstyle C`
+                # Verify that the iPerf server is alive with ICMP, if not skip iperf test and set results to zero
+                /bin/ping -c 1 -w 5 $1 > /dev/null
+                if [ $? -ne 0 ]; then
+                        echo "iPerf server $1 is down - via ICMP ping!"
+                        
+                        iperf_result_client_bytes="0"
+                        iperf_result_server_bytes="0"
+                        
+                        iperf_result_client_bps="0"
+                        iperf_result_server_bps="0"
+                else
+                        echo "Running iPerf test"
+                        iperf_result=`$iperf_bin -c $iperf_server -r -t $iperf_test_interval --reportstyle C`
 
-                iperf_result_client=$(echo "$iperf_result" | head -1)
-                iperf_result_server=$(echo "$iperf_result" | tail -1)
+                        iperf_result_client=$(echo "$iperf_result" | head -1)
+                        iperf_result_server=$(echo "$iperf_result" | tail -1)
 
-                iperf_result_client_bytes=$(echo "$iperf_result_client" | cut -d, -f8)
-                iperf_result_server_bytes=$(echo "$iperf_result_server" | cut -d, -f8)
+                        iperf_result_client_bytes=$(echo "$iperf_result_client" | cut -d, -f8)
+                        iperf_result_server_bytes=$(echo "$iperf_result_server" | cut -d, -f8)
 
-                iperf_result_client_bps=$(echo "$iperf_result_client" | cut -d, -f9)
-                iperf_result_server_bps=$(echo "$iperf_result_server" | cut -d, -f9)
-
+                        iperf_result_client_bps=$(echo "$iperf_result_client" | cut -d, -f9)
+                        iperf_result_server_bps=$(echo "$iperf_result_server" | cut -d, -f9)
+                fi
+                
                 echo "Writing results to file:"
                 echo "$gps_date,$gps_time,$lon,$lat,$alt,$spd,$track,$iperf_server,$iperf_test_interval,$iperf_result_client_bytes,$iperf_result_client_bps,$iperf_result_server_bytes,$iperf_result_server_bps" | tee -a $export_file_name
-
         else
-                echo "No GPS Fix!"
+                echo -e "No GPS Fix!\nRaw GPS Data:"
                 echo $tpv
         fi
 
