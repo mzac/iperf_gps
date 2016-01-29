@@ -164,10 +164,10 @@ do
                                 ping_result_avg=$(echo "$ping_result" | cut -d/ -f2)
                                 ping_result_max=$(echo "$ping_result" | cut -d/ -f3)
                                 ping_result_mdev=$(echo "$ping_result" | cut -d/ -f4)
-                                echo -e "Ping min:\t$ping_result_min ms"
-                                echo -e "Ping avg:\t$ping_result_avg ms"
-                                echo -e "Ping max:\t$ping_result_max ms"
-                                echo -e "Ping mdev:\t$ping_result_mdev ms"
+                                echo -e "Ping min:\t\t$ping_result_min ms"
+                                echo -e "Ping avg:\t\t$ping_result_avg ms"
+                                echo -e "Ping max:\t\t$ping_result_max ms"
+                                echo -e "Ping mdev:\t\t$ping_result_mdev ms"
                         else
                                 echo "ERROR"
                                 ping_result_min="0"
@@ -187,6 +187,11 @@ do
 
                         iperf_result_client_bps=$(echo "$iperf_result_client" | cut -d, -f9)
                         iperf_result_server_bps=$(echo "$iperf_result_server" | cut -d, -f9)
+                        
+                        echo -e "iPerf Client Bytes:\t$iperf_result_client_bytes"
+                        echo -e "iPerf Server Bytes:\t$iperf_result_server_bytes"
+                        echo -e "iPerf Client BPS:\t$iperf_result_client_bps"
+                        echo -e "iPerf Server BPS\t$iperf_result_server_bps"
                 fi
                 echo -ne "NOTE: Writing results to file..."
                 echo "$gps_date,$gps_time,$lon,$lat,$alt,$spd,$track,$iperf_server,$ping_result_min,$ping_result_avg,$ping_result_max,$ping_result_mdev,$iperf_test_interval,$iperf_result_client_bytes,$iperf_result_client_bps,$iperf_result_server_bytes,$iperf_result_server_bps" >> $export_file_name
