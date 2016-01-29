@@ -149,6 +149,15 @@ do
                         track=0
                 fi
 
+                # Print GPS Results
+                echo -e "\nGPS Date:\t\t\t$gps_date"
+                echo -e "GPS Time:\t\t\t$gps_time"
+                echo -e "GPS Longitude:\t\t$lon"
+                echo -e "GPS Latitude:\t\t$lat"
+                echo -e "GPS Altitude:\t\t$alt"
+                echo -e "GPS Speed:\t\t\t$spd"
+                echo -e "GPSTrack:\t\t\t$track\n"
+
                 # Verify that the iPerf server is alive with ICMP, if not skip iperf test and set results to zero
                 echo -en "NOTE: Check if server is still alive..."
                 /bin/ping -n -c 1 -w 5 $iperf_server > /dev/null
@@ -188,7 +197,7 @@ do
                                 ping_result_mdev="0"
                         fi
                         
-                        echo -e "\nNOTE: Running iPerf test..."
+                        echo -ne "\nNOTE: Running iPerf test..."
                         iperf_result=`$iperf_bin -c $iperf_server -r -t $iperf_test_interval --reportstyle C`
 
                         echo -e "Ok\n"
