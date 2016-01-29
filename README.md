@@ -35,14 +35,13 @@ Once you start the script, it will verify if there is a GPS position, and if so 
 
 ```
 NOTE: Test sequence number: 1
-WARNING: No GPS altitude - setting to 0
 
 GPS Date:               2016-01-29
 GPS Time:               16:36:20
 GPS Longitude:          -73.57000000
 GPS Latitude:           45.500000000
-GPS Altitude:           0 Meters
-GPS Speed:              3 km/h
+GPS Altitude:           33 Meters
+GPS Speed:              25 km/h
 GPS Track:              132 Degrees
 
 NOTE: Check if server is still alive...Ok
