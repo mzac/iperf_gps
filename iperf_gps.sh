@@ -230,8 +230,12 @@ do
         fi
 
         echo -en "NOTE: Sleeping for $update_interval seconds..."
-        sleep $update_interval
-        echo "Ok"
+        while [ $update_interval -gt 0 ]; do
+                echo -ne "$update_interval\033[0K\r"
+                sleep 1
+                : $((update_interval--))
+        done
+        echo -ne "Ok\033[0K\r"
         echo "--------------------------------------------------------------------------------"
 
         # Clear all vars
