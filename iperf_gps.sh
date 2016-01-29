@@ -229,11 +229,12 @@ do
                 echo "ERROR: No GPS fix, not running tests!"
         fi
 
-        echo -en "NOTE: Sleeping for $update_interval seconds..."
-        while [ $update_interval -gt 0 ]; do
-                echo -ne "$update_interval\033[0K\r"
+        echo -e "NOTE: Sleeping for $update_interval seconds..."
+        update_interval_tmp="$update_interval"
+        while [ $update_interval_tmp -gt 0 ]; do
+                echo -ne "$update_interval_tmp...\033[0K\r"
                 sleep 1
-                : $((update_interval--))
+                : $((update_interval_tmp--))
         done
         echo -ne "Ok\033[0K\r"
         echo "--------------------------------------------------------------------------------"
