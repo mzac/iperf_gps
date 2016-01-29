@@ -152,7 +152,7 @@ do
                         iperf_result_server_bps="0"
                 else
                         echo "Running ICMP test..."
-                        ping_result=`/bin/ping -n -c 5 -w 5 -i 0.5 $iperf_server | tail -1 | cut -d ' ' -f 4,5`
+                        ping_result=`/bin/ping -n -c 5 -w 5 -i 0.5 $iperf_server | tail -1 | cut -d ' ' -f 4`
                         ping_result_min=$(echo "$ping_result" | cut -d/ -f1)
                         ping_result_avg=$(echo "$ping_result" | cut -d/ -f2)
                         ping_result_max=$(echo "$ping_result" | cut -d/ -f3)
@@ -171,7 +171,7 @@ do
                         iperf_result_server_bps=$(echo "$iperf_result_server" | cut -d, -f9)
                 fi
                 echo "Writing results to file:"
-                echo "$gps_date,$gps_time,$lon,$lat,$alt,$spd,$track,$iperf_server,$ping_min,$ping_avg,$ping_max,$ping_mdev,$iperf_test_interval,$iperf_result_client_bytes,$iperf_result_client_bps,$iperf_result_server_bytes,$iperf_result_server_bps" | tee -a $export_file_name
+                echo "$gps_date,$gps_time,$lon,$lat,$alt,$spd,$track,$iperf_server,$ping_result_min,$ping_result_avg,$ping_result_max,$ping_result_mdev,$iperf_test_interval,$iperf_result_client_bytes,$iperf_result_client_bps,$iperf_result_server_bytes,$iperf_result_server_bps" | tee -a $export_file_name
         else
                 echo -e "No GPS Fix!\nRaw GPS Data:"
                 echo $tpv
