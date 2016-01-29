@@ -58,6 +58,8 @@ else
         iperf_server="$1"
 fi
 
+echo "--------------------------------------------------------------------------------"
+
 # Verify that the iPerf server is alive with ICMP
 echo -ne "\nNOTE: Running ICMP ping to see if server is alive..."
 /bin/ping -n -c 1 -w 5 $iperf_server > /dev/null
@@ -102,6 +104,9 @@ echo "--------------------------------------------------------------------------
 # Print CSV header to file
 echo "date,time,longitude,latitude,altitude,speed,track,iperf_server,ping_min,ping_avg,ping_max,ping_mdev,iperf_test_interval,iperf_client_bytes,iperf_client_bps,iperf_server_bytes,iperf_server_bps" > $export_file_name
 
+# Set test_id to zero
+test_id=0
+
 # Start the loop
 while true
 do
@@ -115,23 +120,30 @@ do
         spd=$(echo "$tpv" | grep "speed" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
         track=$(echo "$tpv" | grep "track" | cut -d: -f2 | cut -d, -f1 | tr -d ' ' | awk '{print int($1)}')
 
-        # Convert speed from meters per second to kilometers per hour
-        spd=`echo $spd | awk '{print int($1 * 3.6)}'`
 
         # Check if lon and lat are set
         if [ ! -z "$lon" -a ! -z "$lat" ]; then
+                
+                echo -e "NOTE: Test sequence number: $test_id"
+                
+                # Convert speed from meters per second to kilometers per hour
+                spd=`echo $spd | awk '{print int($1 * 3.6)}'`
+                
                 if [ -z "$alt" ]; then
                         echo "WARNING: No GPS altitude - setting to 0"
                         alt=0
                 fi
+                
                 if [ -z "$spd" ]; then
                         echo "WARNING: No GPS speed - setting to 0"
                         spd=0
                 fi
+                
                 if [ -z "$track" ]; then
                         echo "WARNING: No GPS track - setting to 0"
                         track=0
                 fi
+                
                 if [ $spd -le 1 ]; then
                         echo "WARNING: Not moving - setting to 0"
                         track=0
@@ -179,6 +191,8 @@ do
                         echo -e "\nNOTE: Running iPerf test..."
                         iperf_result=`$iperf_bin -c $iperf_server -r -t $iperf_test_interval --reportstyle C`
 
+                        echo "Ok\n"
+
                         iperf_result_client=$(echo "$iperf_result" | head -1)
                         iperf_result_server=$(echo "$iperf_result" | tail -1)
 
@@ -193,10 +207,11 @@ do
                         echo -e "iPerf Client BPS:\t$iperf_result_client_bps"
                         echo -e "iPerf Server BPS\t$iperf_result_server_bps"
                 fi
-                echo -ne "NOTE: Writing results to file..."
+                echo -ne "\nNOTE: Writing results to file..."
                 echo "$gps_date,$gps_time,$lon,$lat,$alt,$spd,$track,$iperf_server,$ping_result_min,$ping_result_avg,$ping_result_max,$ping_result_mdev,$iperf_test_interval,$iperf_result_client_bytes,$iperf_result_client_bps,$iperf_result_server_bytes,$iperf_result_server_bps" >> $export_file_name
                 if [ $? -eq 0 ]; then
                         echo "Ok"
+                        ((test_id++))
                 else
                         echo "ERROR: Cannot write to $export_file_name"
                         exit 1
