@@ -7,6 +7,7 @@ This script lets you run iPerf from a Linux computer to a remote iPerf server wh
 - Linux
 - iPerf https://iperf.fr/
 - gpsd http://www.catb.org/gpsd/
+- Netcat https://en.wikipedia.org/wiki/Netcat
 - Python https://www.python.org/
 - A GPS connected to your computer
 
