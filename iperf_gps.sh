@@ -181,6 +181,7 @@ do
 
         echo -e "Sleeping for $update_interval seconds...\n"
         sleep $update_interval
+        echo "--------------------------------------------------------------------------------"
 
         # Clear all vars
         unset tpv
