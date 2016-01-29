@@ -185,13 +185,13 @@ do
 
         # Clear all vars
         unset tpv
+        unset gps_date
+        unset gps_time
         unset lat
         unset lon
         unset alt
         unset spd
         unset track
-        unset gps_date
-        unset gps_time
         unset gps_result
         unset ping_result
         unset ping_result_min
