@@ -59,6 +59,7 @@ if [ -z $1 -a -z $2 ]; then
 fi
 
 # Verify that the iPerf server is alive with ICMP
+echo "Running ICMP test to see if server is alive..."
 /bin/ping -n -c 1 -w 5 $iperf_server > /dev/null
 if [ $? -ne 0 ]; then
         echo "iPerf server $iperf_server is down - via ICMP ping!"
@@ -66,7 +67,8 @@ if [ $? -ne 0 ]; then
 fi
 
 # Verify that the iPerf server is up
-/bin/nc -z -v -w 5 $iperf_server $iperf_port > /dev/null
+echo "Running nc test to see if iPerf is up on server..."
+/bin/nc -z -v -w 5 $iperf_server $iperf_port 2> /dev/null
 if [ $? -ne 0 ]; then
         echo "iPerf server $iperf_server on port $iperf_port is down!"
         exit 1
@@ -87,8 +89,8 @@ if [ ! -w "$export_file_name" ]; then
         exit 1
 fi
 
-# Print CSV header to console
-echo "date,time,longitude,latitude,altitude,speed,track,iperf_server,ping_min,ping_avg,ping_max,ping_mdev,iperf_test_interval,iperf_client_bytes,iperf_client_bps,iperf_server_bytes,iperf_server_bps" >> $export_file_name
+# Print CSV header to console and file
+echo "date,time,longitude,latitude,altitude,speed,track,iperf_server,ping_min,ping_avg,ping_max,ping_mdev,iperf_test_interval,iperf_client_bytes,iperf_client_bps,iperf_server_bytes,iperf_server_bps" | tee -a $export_file_name
 
 echo -e "\nAt any time, press CRTL-C to stop the script"
 echo -e "Writing to $export_file_name\n"
