@@ -86,7 +86,7 @@ export_file_name="$iperf_server-$2-$export_file_timestamp.csv"
 if [ ! -e "$export_file_name" ]; then
         touch "$export_file_name"
 else
-        echo "ERROR: File $export_file_name already exists!"
+        echo "ERROR: File $export_file_name already exists or cannot create!"
         exit 1
 fi
 
@@ -100,7 +100,7 @@ echo -e "NOTE: Writing CSV data to $export_file_name"
 echo "--------------------------------------------------------------------------------"
 
 # Print CSV header to file
-echo "date,time,longitude,latitude,altitude,speed,track,iperf_server,ping_min,ping_avg,ping_max,ping_mdev,iperf_test_interval,iperf_client_bytes,iperf_client_bps,iperf_server_bytes,iperf_server_bps" >> $export_file_name
+echo "date,time,longitude,latitude,altitude,speed,track,iperf_server,ping_min,ping_avg,ping_max,ping_mdev,iperf_test_interval,iperf_client_bytes,iperf_client_bps,iperf_server_bytes,iperf_server_bps" > $export_file_name
 
 # Start the loop
 while true
@@ -159,15 +159,15 @@ do
                         echo -ne "NOTE: Running ICMP test..."
                         ping_result=`/bin/ping -n -c 5 -w 5 -i 0.5 $iperf_server | tail -1 | cut -d ' ' -f 4`
                         if [ $? -eq 0 ]; then
-                                echo "Ok"
+                                echo -e "Ok\n"
                                 ping_result_min=$(echo "$ping_result" | cut -d/ -f1)
                                 ping_result_avg=$(echo "$ping_result" | cut -d/ -f2)
                                 ping_result_max=$(echo "$ping_result" | cut -d/ -f3)
                                 ping_result_mdev=$(echo "$ping_result" | cut -d/ -f4)
-                                echo -e "Ping min:\t$ping_result_min"
-                                echo -e "Ping avg:\t$ping_result_avg"
-                                echo -e "Ping max:\t$ping_result_max"
-                                echo -e "Ping mdev:\t$ping_result_mdev"
+                                echo -e "Ping min:\t$ping_result_min ms"
+                                echo -e "Ping avg:\t$ping_result_avg ms"
+                                echo -e "Ping max:\t$ping_result_max ms"
+                                echo -e "Ping mdev:\t$ping_result_mdev ms"
                         else
                                 echo "ERROR"
                                 ping_result_min="0"
@@ -176,7 +176,7 @@ do
                                 ping_result_mdev="0"
                         fi
                         
-                        echo "NOTE: Running iPerf test..."
+                        echo -e "\nNOTE: Running iPerf test..."
                         iperf_result=`$iperf_bin -c $iperf_server -r -t $iperf_test_interval --reportstyle C`
 
                         iperf_result_client=$(echo "$iperf_result" | head -1)
@@ -188,14 +188,21 @@ do
                         iperf_result_client_bps=$(echo "$iperf_result_client" | cut -d, -f9)
                         iperf_result_server_bps=$(echo "$iperf_result_server" | cut -d, -f9)
                 fi
-                echo "NOTE: Writing results to file..."
-                echo "$gps_date,$gps_time,$lon,$lat,$alt,$spd,$track,$iperf_server,$ping_result_min,$ping_result_avg,$ping_result_max,$ping_result_mdev,$iperf_test_interval,$iperf_result_client_bytes,$iperf_result_client_bps,$iperf_result_server_bytes,$iperf_result_server_bps" | tee -a $export_file_name
+                echo -ne "NOTE: Writing results to file..."
+                echo "$gps_date,$gps_time,$lon,$lat,$alt,$spd,$track,$iperf_server,$ping_result_min,$ping_result_avg,$ping_result_max,$ping_result_mdev,$iperf_test_interval,$iperf_result_client_bytes,$iperf_result_client_bps,$iperf_result_server_bytes,$iperf_result_server_bps" >> $export_file_name
+                if [ $? -eq 0 ]; then
+                        echo "Ok"
+                else
+                        echo "ERROR: Cannot write to $export_file_name"
+                        exit 1
+                fi
         else
-                echo "ERROR: No GPS Fix!"
+                echo "ERROR: No GPS fix, not running tests!"
         fi
 
-        echo -e "NOTE: Sleeping for $update_interval seconds...\n"
+        echo -en "NOTE: Sleeping for $update_interval seconds..."
         sleep $update_interval
+        echo "Ok"
         echo "--------------------------------------------------------------------------------"
 
         # Clear all vars
