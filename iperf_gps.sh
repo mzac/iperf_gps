@@ -97,12 +97,6 @@ echo -e "GPS Data: time,lon,lat,alt,spd,track\n"
 # Start the loop
 while true
 do
-
-# Verify that the iPerf server is alive with ICMP
-/bin/ping -c 1 -w 5 $1 > /dev/null
-if [ $? -ne 0 ]; then
-        echo "iPerf server $1 is down - via ICMP ping!"
-else
         # Get GPS Data in JSON format from gpsd
         tpv=$($gpspipe_bin -w -n 5 | grep -m 1 TPV | python -mjson.tool)
         lon=$(echo "$tpv" | grep "lon" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
@@ -160,26 +154,25 @@ else
                 echo "No GPS Fix!"
                 echo $tpv
         fi
-fi
 
-echo -e "Sleeping for $update_interval seconds...\n"
-sleep $update_interval
+        echo -e "Sleeping for $update_interval seconds...\n"
+        sleep $update_interval
 
-# Clear all vars
-unset tpv
-unset lat
-unset lon
-unset alt
-unset spd
-unset track
-unset gps_date
-unset gps_time
-unset gps_result
-unset iperf_result
-unset iperf_result_server
-unset iperf_result_client_bytes
-unset iperf_result_server_bytes
-unset iperf_result_client_bps
-unset iperf_result_server_bps
+        # Clear all vars
+        unset tpv
+        unset lat
+        unset lon
+        unset alt
+        unset spd
+        unset track
+        unset gps_date
+        unset gps_time
+        unset gps_result
+        unset iperf_result
+        unset iperf_result_server
+        unset iperf_result_client_bytes
+        unset iperf_result_server_bytes
+        unset iperf_result_client_bps
+        unset iperf_result_server_bps
 
 done
