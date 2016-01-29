@@ -138,9 +138,11 @@ do
                 fi
 
                 # Verify that the iPerf server is alive with ICMP, if not skip iperf test and set results to zero
+                echo -en "Check if server is still alive..."
                 /bin/ping -n -c 1 -w 5 $iperf_server > /dev/null
                 if [ $? -ne 0 ]; then
-                        echo "iPerf server $iperf_server is down - via ICMP ping!"
+                        echo "ERROR"
+                        echo "iPerf server $iperf_server is down - via ICMP ping, setting iPerf results to 0!"
                         
                         ping_result_min="0"
                         ping_result_avg="0"
@@ -153,12 +155,26 @@ do
                         iperf_result_client_bps="0"
                         iperf_result_server_bps="0"
                 else
-                        echo "Running ICMP test..."
+                        echo "Ok"
+                        echo -ne "Running ICMP test..."
                         ping_result=`/bin/ping -n -c 5 -w 5 -i 0.5 $iperf_server | tail -1 | cut -d ' ' -f 4`
-                        ping_result_min=$(echo "$ping_result" | cut -d/ -f1)
-                        ping_result_avg=$(echo "$ping_result" | cut -d/ -f2)
-                        ping_result_max=$(echo "$ping_result" | cut -d/ -f3)
-                        ping_result_mdev=$(echo "$ping_result" | cut -d/ -f4)
+                        if [ $? -e 0 ]; then
+                                echo "Ok"
+                                ping_result_min=$(echo "$ping_result" | cut -d/ -f1)
+                                ping_result_avg=$(echo "$ping_result" | cut -d/ -f2)
+                                ping_result_max=$(echo "$ping_result" | cut -d/ -f3)
+                                ping_result_mdev=$(echo "$ping_result" | cut -d/ -f4)
+                                echo -e "Ping min:\t$ping_result_min"
+                                echo -e "Ping avg:\t$ping_result_avg"
+                                echo -e "Ping max:\t$ping_result_max"
+                                echo -e "Ping mdev:\t$ping_result_mdev"
+                        else
+                                echo "ERROR"
+                                ping_result_min="0"
+                                ping_result_avg="0"
+                                ping_result_max="0"
+                                ping_result_mdev="0"
+                        fi
                         
                         echo "Running iPerf test..."
                         iperf_result=`$iperf_bin -c $iperf_server -r -t $iperf_test_interval --reportstyle C`
