@@ -69,7 +69,7 @@ else
 fi
 
 # Verify that the iPerf server is up
-echo "Running nc test to see if iPerf is up on server..."
+echo -ne "Running Netcat test to see if iPerf is up on server..."
 /bin/nc -z -v -w 5 $iperf_server $iperf_port 2> /dev/null
 if [ $? -ne 0 ]; then
         echo "ERROR: iPerf server $iperf_server on port $iperf_port is down!"
@@ -85,21 +85,22 @@ export_file_name="$iperf_server-$2-$export_file_timestamp.csv"
 # Verify if the export file already exists
 if [ ! -e "$export_file_name" ]; then
         touch "$export_file_name"
+else
+        echo "ERROR: File $export_file_name already exists!"
+        exit 1
 fi
 
 # Verify that we can write to the export file
 if [ ! -w "$export_file_name" ]; then
-        echo "Cannot write to $export_file_name"
+        echo "ERROR: Cannot write to $export_file_name"
         exit 1
 fi
 
-# Print CSV header to file
-echo "date,time,longitude,latitude,altitude,speed,track,iperf_server,ping_min,ping_avg,ping_max,ping_mdev,iperf_test_interval,iperf_client_bytes,iperf_client_bps,iperf_server_bytes,iperf_server_bps" >> $export_file_name
-
+echo -e "Writing CSV data to $export_file_name\n"
 echo "--------------------------------------------------------------------------------"
 
-echo -e "Writing to $export_file_name\n"
-echo -e "GPS Data: date,time,longitude,latitude,altitude,speed,track\n"
+# Print CSV header to file
+echo "date,time,longitude,latitude,altitude,speed,track,iperf_server,ping_min,ping_avg,ping_max,ping_mdev,iperf_test_interval,iperf_client_bytes,iperf_client_bps,iperf_server_bytes,iperf_server_bps" >> $export_file_name
 
 # Start the loop
 while true
@@ -120,27 +121,21 @@ do
         # Check if lon and lat are set
         if [ ! -z "$lon" -a ! -z "$lat" ]; then
                 if [ -z "$alt" ]; then
-                        echo "No alt - setting to 0"
+                        echo "NOTE: No GPS altitude - setting to 0"
                         alt=0
                 fi
                 if [ -z "$spd" ]; then
-                        echo "No speed - setting to 0"
+                        echo "NOTE: No GPS speed - setting to 0"
                         spd=0
                 fi
                 if [ -z "$track" ]; then
-                        echo "No track - setting to 0"
+                        echo "NOTE: No GPS track - setting to 0"
                         track=0
                 fi
                 if [ $spd -le 1 ]; then
-                        echo "Not moving - setting track to 0"
+                        echo "NOTE: Not moving - setting to 0"
                         track=0
                 fi
-
-                # Create GPS result string
-                gps_result="$gps_date,$gps_time,$lon,$lat,$alt,$spd,$track"
-
-                # Print GPS data received from gpsd
-                echo "GPS Data: $gps_result"
 
                 # Verify that the iPerf server is alive with ICMP, if not skip iperf test and set results to zero
                 /bin/ping -n -c 1 -w 5 $iperf_server > /dev/null
@@ -197,7 +192,6 @@ do
         unset alt
         unset spd
         unset track
-        unset gps_result
         unset ping_result
         unset ping_result_min
         unset ping_result_avg
