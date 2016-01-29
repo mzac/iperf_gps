@@ -59,7 +59,7 @@ else
 fi
 
 # Verify that the iPerf server is alive with ICMP
-echo -ne "\nRunning ICMP test to see if server is alive..."
+echo -ne "\nNOTE: Running ICMP ping to see if server is alive..."
 /bin/ping -n -c 1 -w 5 $iperf_server > /dev/null
 if [ $? -ne 0 ]; then
         echo "ERROR: iPerf server $iperf_server is down - via ICMP ping!"
@@ -69,7 +69,7 @@ else
 fi
 
 # Verify that the iPerf server is up
-echo -ne "Running Netcat test to see if iPerf is up on server..."
+echo -ne "NOTE: Running Netcat test to see if iPerf is up on server..."
 /bin/nc -z -v -w 5 $iperf_server $iperf_port 2> /dev/null
 if [ $? -ne 0 ]; then
         echo "ERROR: iPerf server $iperf_server on port $iperf_port is down!"
@@ -96,7 +96,7 @@ if [ ! -w "$export_file_name" ]; then
         exit 1
 fi
 
-echo -e "Writing CSV data to $export_file_name\n"
+echo -e "NOTE: Writing CSV data to $export_file_name"
 echo "--------------------------------------------------------------------------------"
 
 # Print CSV header to file
@@ -121,28 +121,28 @@ do
         # Check if lon and lat are set
         if [ ! -z "$lon" -a ! -z "$lat" ]; then
                 if [ -z "$alt" ]; then
-                        echo "NOTE: No GPS altitude - setting to 0"
+                        echo "WARNING: No GPS altitude - setting to 0"
                         alt=0
                 fi
                 if [ -z "$spd" ]; then
-                        echo "NOTE: No GPS speed - setting to 0"
+                        echo "WARNING: No GPS speed - setting to 0"
                         spd=0
                 fi
                 if [ -z "$track" ]; then
-                        echo "NOTE: No GPS track - setting to 0"
+                        echo "WARNING: No GPS track - setting to 0"
                         track=0
                 fi
                 if [ $spd -le 1 ]; then
-                        echo "NOTE: Not moving - setting to 0"
+                        echo "WARNING: Not moving - setting to 0"
                         track=0
                 fi
 
                 # Verify that the iPerf server is alive with ICMP, if not skip iperf test and set results to zero
-                echo -en "Check if server is still alive..."
+                echo -en "NOTE: Check if server is still alive..."
                 /bin/ping -n -c 1 -w 5 $iperf_server > /dev/null
                 if [ $? -ne 0 ]; then
                         echo "ERROR"
-                        echo "iPerf server $iperf_server is down - via ICMP ping, setting iPerf results to 0!"
+                        echo "ERROR: iPerf server $iperf_server is down - via ICMP ping, setting iPerf results to 0!"
                         
                         ping_result_min="0"
                         ping_result_avg="0"
@@ -156,9 +156,9 @@ do
                         iperf_result_server_bps="0"
                 else
                         echo "Ok"
-                        echo -ne "Running ICMP test..."
+                        echo -ne "NOTE: Running ICMP test..."
                         ping_result=`/bin/ping -n -c 5 -w 5 -i 0.5 $iperf_server | tail -1 | cut -d ' ' -f 4`
-                        if [ $? -e 0 ]; then
+                        if [ $? -eq 0 ]; then
                                 echo "Ok"
                                 ping_result_min=$(echo "$ping_result" | cut -d/ -f1)
                                 ping_result_avg=$(echo "$ping_result" | cut -d/ -f2)
@@ -176,7 +176,7 @@ do
                                 ping_result_mdev="0"
                         fi
                         
-                        echo "Running iPerf test..."
+                        echo "NOTE: Running iPerf test..."
                         iperf_result=`$iperf_bin -c $iperf_server -r -t $iperf_test_interval --reportstyle C`
 
                         iperf_result_client=$(echo "$iperf_result" | head -1)
@@ -188,14 +188,13 @@ do
                         iperf_result_client_bps=$(echo "$iperf_result_client" | cut -d, -f9)
                         iperf_result_server_bps=$(echo "$iperf_result_server" | cut -d, -f9)
                 fi
-                echo "Writing results to file:"
+                echo "NOTE: Writing results to file..."
                 echo "$gps_date,$gps_time,$lon,$lat,$alt,$spd,$track,$iperf_server,$ping_result_min,$ping_result_avg,$ping_result_max,$ping_result_mdev,$iperf_test_interval,$iperf_result_client_bytes,$iperf_result_client_bps,$iperf_result_server_bytes,$iperf_result_server_bps" | tee -a $export_file_name
         else
-                echo -e "No GPS Fix!\nRaw GPS Data:"
-                echo $tpv
+                echo "ERROR: No GPS Fix!"
         fi
 
-        echo -e "Sleeping for $update_interval seconds...\n"
+        echo -e "NOTE: Sleeping for $update_interval seconds...\n"
         sleep $update_interval
         echo "--------------------------------------------------------------------------------"
 
