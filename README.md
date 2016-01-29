@@ -47,5 +47,5 @@ You will then be able to parse the CSV file created however you wish.
 
 ## Roadmap
 - [ ] Create CSV to KML script
-- [ ] Add in ICMP checks
-- [ ] Verify iPerf server is up and working before running tests
+- [x] Add in ICMP checks
+- [x] Verify iPerf server is up and working before running tests
