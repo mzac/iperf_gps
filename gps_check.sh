@@ -6,6 +6,9 @@ gpspipe_bin="/usr/bin/gpspipe"
 # Location of gpsd PID
 gpsd_pid_file="/var/run/gpsd.pid"
 
+# How many seconds to sleep between tests
+update_interval=10
+
 # --------------------------------------------------------------------------------
 # Do not change any settings below this line
 
@@ -44,13 +47,13 @@ do
   spd=`echo $spd | awk '{print int($1 * 3.6)}'`
 
   # Print GPS Results
-  echo -e "Date:\t$gps_date"
-  echo -e "Time:\t$gps_time"
+  echo -e "Date:\t\t$gps_date"
+  echo -e "Time:\t\t$gps_time"
   echo -e "Longitude:\t$lon"
   echo -e "Latitude:\t$lat"
   echo -e "Altitude:\t$alt"
-  echo -e "Speed:\t$spd"
-  echo -e "Track:\t$track"
+  echo -e "Speed:\t\t$spd"
+  echo -e "Track:\t\t$track"
 
   echo -e "Sleeping for $update_interval seconds...\n"
   sleep $update_interval
