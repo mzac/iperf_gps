@@ -111,7 +111,7 @@ test_id=1
 while true
 do
         # Get GPS Data in JSON format from gpsd
-        tpv=$($gpspipe_bin -w -n 5 | grep -m 1 TPV | python -mjson.tool)
+        tpv=$($gpspipe_bin -w -n 5 | grep -m 1 TPV | python -mjson.tool 2>/dev/null)
         gps_date=$(echo "$tpv" | grep "time" | cut -d: -f2 | cut -dT -f1 | cut -d, -f1 | tr -d ' ' | tr -d '"')
         gps_time=$(echo "$tpv" | grep "time" | cut -dT -f2 | cut -d. -f1 | cut -d, -f1 | tr -d ' ')
         lon=$(echo "$tpv" | grep "lon" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
@@ -119,7 +119,6 @@ do
         alt=$(echo "$tpv" | grep "alt" | cut -d: -f2 | cut -d, -f1 | tr -d ' ' | awk '{print int($1)}')
         spd=$(echo "$tpv" | grep "speed" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
         track=$(echo "$tpv" | grep "track" | cut -d: -f2 | cut -d, -f1 | tr -d ' ' | awk '{print int($1)}')
-
 
         # Check if lon and lat are set
         if [ ! -z "$lon" -a ! -z "$lat" ]; then
@@ -130,22 +129,22 @@ do
                 spd=`echo $spd | awk '{print int($1 * 3.6)}'`
                 
                 if [ -z "$alt" ]; then
-                        echo "WARNING: No GPS altitude - setting to 0"
+                        echo "WARNING: No GPS altitude - setting to 0 Meters"
                         alt=0
                 fi
                 
                 if [ -z "$spd" ]; then
-                        echo "WARNING: No GPS speed - setting to 0"
+                        echo "WARNING: No GPS speed - setting to 0 km/h"
                         spd=0
                 fi
                 
                 if [ -z "$track" ]; then
-                        echo "WARNING: No GPS track - setting to 0"
+                        echo "WARNING: No GPS track - setting to 0 Degrees"
                         track=0
                 fi
                 
                 if [ $spd -le 1 ]; then
-                        echo "WARNING: Not moving - setting track to 0"
+                        echo "WARNING: Not moving - setting track to 0 Degrees"
                         track=0
                 fi
 
