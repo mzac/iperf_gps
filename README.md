@@ -24,22 +24,44 @@ root@pi:~# ./iperf_gps.sh
 ```
 root@pi:~# ./iperf_gps.sh 10.0.0.10 vehicle1
 
-At any time, press CRTL-C to stop the script
-Writing to 10.0.0.10-vehicle1-2016-01-28T17:42:35+0000.csv
+--------------------------------------------------------------------------------
+NOTE: Running ICMP ping to see if server is alive...Ok
+NOTE: Running Netcat test to see if iPerf is up on server...Ok
+NOTE: Writing CSV data to 10.0.0.10-vehicle1-2016-01-29T16:35:43+0000.csv
+--------------------------------------------------------------------------------
 ```
 
 Once you start the script, it will verify if there is a GPS position, and if so will then run iPerf tests
 
 ```
-GPS Data: time,lon,lat,alt,spd,track
+NOTE: Test sequence number: 1
+WARNING: No GPS altitude - setting to 0
 
-Not moving - setting track to 0
-GPS Data: 2016-01-28,17:45:06,-73.57000000,45.500000000,48,1,0
-Running iperf test
-Writing results to file:
-2016-01-28,17:45:06,-73.57000000,45.500000000,48,1,0,10.0.0.10,5,524288,576495,917504,688276
-Sleeping for 10 seconds...
+GPS Date:               2016-01-29
+GPS Time:               16:36:20
+GPS Longitude:          -73.57000000
+GPS Latitude:           45.500000000
+GPS Altitude:           0 Meters
+GPS Speed:              3 km/h
+GPS Track:              132 Degrees
 
+NOTE: Check if server is still alive...Ok
+NOTE: Running ICMP test...Ok
+
+Ping min:               9.004 ms
+Ping avg:               9.699 ms
+Ping max:               10.579 ms
+Ping mdev:              0.547 ms
+
+NOTE: Running iPerf test...Ok
+
+iPerf Client Bytes:     3407872
+iPerf Server Bytes:     3670016
+iPerf Client BPS:       5050635
+iPerf Server BPS        4850194
+
+NOTE: Writing results to file...Ok
+NOTE: Sleeping for 10 seconds...
 ```
 
 When you are finished with your tests, stop the script with `CTRL-C`
