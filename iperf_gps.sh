@@ -180,6 +180,7 @@ do
                 echo -e "GPS Track:\t\t$track Degrees\n"
 
                 # Verify if we have a Wifi connection
+                wifi_disconnected=0
                 if [ -n "$wifi_interface" ]; then
                         echo -ne "NOTE: Check if we are still connected to Wifi..."
                         wifi_connection_status=`/sbin/iw dev $wifi_interface link | grep "Connected to" | cut -d ' ' -f 1,2`
@@ -203,7 +204,6 @@ do
                                 echo -e "Wifi Signal:\t\t$wifi_signal"
                                 echo -e "Wifi TX Rate:\t\t$wifi_tx_rate"
                                 echo -e "Wifi RX Rate:\t\t$wifi_rx_rate\n"
-                                wifi_disconnected=0
                         else
                                 echo "ERROR!"
                                 echo "ERROR: Wifi is disconnected, settings results to 0!"
