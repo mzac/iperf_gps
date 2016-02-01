@@ -4,6 +4,10 @@ This script lets you run iPerf from a Linux computer to a remote iPerf server wh
 
 It will also collect Ping tests data as well as Wireless Wifi statistics if you are on Wifi.
 
+Uses of this script include:
+- Outdoor Wifi Survey
+- Moving Vehicle 3G/LTE Connection
+
 ## Requirements:
 
 - Linux
