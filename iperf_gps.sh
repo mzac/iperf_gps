@@ -51,7 +51,7 @@ wifi_list=`/bin/netstat -i | grep wlan | cut -d ' ' -f1 | tr '\n' ' '`
 if [[ $wifi_list =~ .*wlan.* ]]; then
         echo -e "Ok\n"
         read -p "NOTE: Use Wifi (y/n) [y]: " use_wifi
-        if [ -z "use_wifi" ]; then
+        if [ -z "$use_wifi" ]; then
                 use_wifi="y"
         fi
         case "$use_wifi" in
