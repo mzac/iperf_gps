@@ -50,22 +50,24 @@ echo -ne "NOTE: Verify if have Wifi..."
 wifi_list=`/bin/netstat -i | grep wlan | cut -d ' ' -f1 | tr '\n' ' '`
 if [[ $wifi_list =~ .*wlan.* ]]; then
         echo -e "Ok\n"
-        use_wifi="y"
         read -p "NOTE: Use Wifi (y/n) [y]: " use_wifi
+        if [ -z "use_wifi" ]; then
+                use_wifi="y"
+        fi
         case "$use_wifi" in
-                [yY])
+                y*|Y*)
                         read -p "NOTE: Select Wifi interface to use (wlan0 default) [${wifi_list%?}]: " wifi_interface
                         if [ "$wifi_interface" = "" ]; then
                                 wifi_interface="wlan0"
                                 echo -e "NOTE: Setting Wifi interface to $wifi_interface...Ok"
                         fi
-                        ;;
-                [nN])
+                ;;
+                n*|N*)
                         echo -e "NOTE: Not using Wifi..."
-                        ;;
+                ;;
                 *)
                         echo "Invalid input!"
-                        ;;
+                ;;
         esac
 else
         echo "No Wifi interfaces found!"
