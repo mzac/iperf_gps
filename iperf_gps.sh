@@ -171,14 +171,14 @@ do
                                 
                                 # Get Wifi data
                                 wifi_iw_link=`/sbin/iw dev $wifi_interface link`
-                                wifi_bssid=`echo $wifi_iw_link | grep "Connected to" | cut -d ' ' -f3`
-                                wifi_ssid=`echo $wifi_iw_link | grep "SSID" | cut -d ' ' -f2`
-                                wifi_freq=`echo $wifi_iw_link | grep "freq" | cut -d ' ' -f2`
+                                wifi_bssid=`printf '%s\n' "$wifi_iw_link" | grep "Connected to" | cut -d ' ' -f3`
+                                wifi_ssid=`printf '%s\n' "$wifi_iw_link" | grep "SSID" | cut -d ' ' -f2`
+                                wifi_freq=`printf '%s\n' "$wifi_iw_link" | grep "freq" | cut -d ' ' -f2`
                                 
                                 wifi_iw_station_dump=`/sbin/iw dev $wifi_interface station dump`
-                                wifi_signal=`echo $wifi_iw_station_dump | grep "signal:" | tr -d '\t' | cut -d ' ' -f3,4`
-                                wifi_tx_rate=`echo $wifi_iw_station_dump | grep "tx bitrate:" | tr -d '\t' | awk -F':' '{print $NF}'`
-                                wifi_rx_rate=`echo $wifi_iw_station_dump | grep "rx bitrate:" | tr -d '\t' | awk -F':' '{print $NF}'`
+                                wifi_signal=`printf '%s\n' "$wifi_iw_station_dump" | grep "signal:" | tr -d '\t' | cut -d ' ' -f3,4`
+                                wifi_tx_rate=`printf '%s\n' "$wifi_iw_station_dump" | grep "tx bitrate:" | tr -d '\t' | awk -F':' '{print $NF}'`
+                                wifi_rx_rate=`printf '%s\n' "$wifi_iw_station_dump" | grep "rx bitrate:" | tr -d '\t' | awk -F':' '{print $NF}'`
                                 
                                 echo -e "Wifi SSID:\t\t$wifi_ssid"
                                 echo -e "Wifi BSSID:\t\t$wifi_bssid"
