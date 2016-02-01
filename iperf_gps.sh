@@ -166,7 +166,7 @@ do
                 if [ -n "$wifi_interface" ]; then
                         echo -ne "NOTE: Check if we are still connected to Wifi..."
                         wifi_connection_status=`/sbin/iw dev $wifi_interface link | grep "Connected to" | cut -d ' ' -f 1,2`
-                        if [ $wifi_connection_status == 'Connected to' ]; then
+                        if [ "$wifi_connection_status" == "Connected to" ]; then
                                 echo -e "Ok\n"
                                 
                                 # Get Wifi data
