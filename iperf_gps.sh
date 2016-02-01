@@ -57,7 +57,6 @@ if [[ $wifi_list =~ .*wlan.* ]]; then
                         read -p "NOTE: Select Wifi interface to use (wlan0 default) [${wifi_list%?}]: " wifi_interface
                         if [ "$wifi_interface" = "" ]; then
                                 wifi_interface="wlan0"
-                        fi
                                 echo -e "NOTE: Setting Wifi interface to $wifi_interface...Ok"
                         fi
                         ;;
