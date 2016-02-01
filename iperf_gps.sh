@@ -322,7 +322,6 @@ do
                 done
         else
                 echo -e "NOTE: Press [ENTER] when ready to run next test..."
-                done
         fi
 
         echo -e "--------------------------------------------------------------------------------\033[0K\r"
