@@ -44,10 +44,11 @@ echo -ne "NOTE: Verify if we are on wireless..."
 wifi_list=`/bin/netstat -i | grep wlan | cut -d ' ' -f1 | tr '\n' ' '`
 if [[ $wifi_list =~ .*wlan.* ]]; then
         echo "Ok"
-        read -p "NOTE: Select Wifi interface to use (wlan0 default) [$wifi_list]: " wifi_interface
+        read -p "NOTE: Select Wifi interface to use (wlan0 default) [${wifi_list%?}]: " wifi_interface
         if [ "$wifi_interface" = "" ]; then
                 wifi_interface="wlan0"
         fi
+        echo -e "NOTE: Setting Wifi interface to $wifi_interface ...Ok"
 else
         echo "None found!"
 fi
