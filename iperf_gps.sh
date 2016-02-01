@@ -40,7 +40,7 @@ usage() {
 }
 
 # Get command line arguments
-while getopts ":i:w:" opts; do
+while getopts ":i:w:h" opts; do
         case "${opts}" in
         i)
                 iperf_server=${OPTARG}
@@ -48,11 +48,17 @@ while getopts ":i:w:" opts; do
         w)
                 base_filename=${OPTARG}
                 ;;
-        *)
+        h | *)
                 usage
+                exit 0
                 ;;
         esac
 done
+
+# Verify if all command line arguments are specified
+if [ -z "${i}" ] || [ -z ${w} ]; then
+        usage
+fi
 
 echo -e "\n--------------------------------------------------------------------------------"
 
