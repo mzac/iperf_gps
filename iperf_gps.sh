@@ -49,7 +49,7 @@ echo -e "\n---------------------------------------------------------------------
 echo -ne "NOTE: Verify if have Wifi..."
 wifi_list=`/bin/netstat -i | grep wlan | cut -d ' ' -f1 | tr '\n' ' '`
 if [[ $wifi_list =~ .*wlan.* ]]; then
-        echo "Ok\n"
+        echo -e "Ok\n"
         use_wifi="y"
         read -p "NOTE: Use Wifi (y/n) [y]: " use_wifi
         case "$use_wifi" in
