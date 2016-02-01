@@ -40,8 +40,11 @@ fi
 echo -e "\n--------------------------------------------------------------------------------"
 
 # Verify if we are on wireless
+echo -e "NOTE: Verify if we are on wireless..."
 wlan_list=`/bin/netstat -i | grep wlan | cut -d ' ' -f1 | tr '\n' ' '`
-
+if [[ $wlan_list =~ .*wlan.* ]]; then
+        echo "Found wifi interfaces"
+fi
 
 # Verify that the iPerf server is alive with ICMP
 echo -ne "NOTE: Running ICMP ping to see if server is alive..."
