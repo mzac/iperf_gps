@@ -20,6 +20,10 @@ root@pi:~# git clone https://github.com/mzac/iperf_gps.git
 root@pi:~# cd iperf_gps
 root@pi:~# cp config.ini.default config.ini
 root@pi:~# ./iperf_gps.sh
+
+Usage:
+./iperf_gps.sh -i <server_ip> -w <base_filename>
+
 ```
 
 ## Example:
