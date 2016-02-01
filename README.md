@@ -34,6 +34,7 @@ Usage:
 root@pi:~# ./iperf_gps.sh -i 10.0.0.10 -w vehicle1
 
 --------------------------------------------------------------------------------
+NOTE: Verify if have Wifi...No Wifi interfaces found!
 NOTE: Running ICMP ping to see if server is alive...Ok
 NOTE: Running Netcat test to see if iPerf is up on server...Ok
 NOTE: Writing CSV data to 10.0.0.10-vehicle1-2016-01-29T16:35:43+0000.csv
