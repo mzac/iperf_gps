@@ -1,16 +1,18 @@
 #!/bin/bash
 
-# Location of gpspipe binary
-gpspipe_bin="/usr/bin/gpspipe"
+# Look for config file
+if [ -e ./config.ini ]; then
+        source ./config.ini
+else
+        echo -e "\nWARNING: config.ini not found, using defaults!";
+        source ./config.ini.default
+fi
 
-# Location of gpsd PID
-gpsd_pid_file="/var/run/gpsd.pid"
-
-# How many seconds to sleep between tests
-update_interval=10
-
-# --------------------------------------------------------------------------------
-# Do not change any settings below this line
+# Verify if this script is running as root and if not exit
+if [ "$(id -u)" != "0" ]; then
+        echo -n "\nERROR: This script must be run as root!\n" 1>&2
+        exit 1
+fi
 
 # Verify if gpspipe is installed
 if [ ! -x $gpspipe_bin ]; then
@@ -19,14 +21,9 @@ if [ ! -x $gpspipe_bin ]; then
 fi
 
 # Verify if gpsd is running
-if [ -e $gpsd_pid_file ]; then
-        gpsd_pid=`cat $gpsd_pid_file`
-        if [ ! -e /proc/$gpsd_pid/exe ]; then
-                echo "GPSD is not running, please make sure to start it!"
-                exit 1
-        fi
-else
-        echo "Cannot find GPSD PID file!"
+gpsd_pid=`ps cax | grep gpsd`
+if [ $? -ne 0 ]; then
+        echo "\nERROR: GPSD is not running, please make sure to start it!\n"
         exit 1
 fi
 
