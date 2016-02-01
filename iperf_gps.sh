@@ -18,6 +18,9 @@ usage() {
         exit 0
 }
 
+# Set manual run to 0
+manual_run=0
+
 # Get command line arguments
 while getopts ":i:w:hm" opts; do
         case "${opts}" in
