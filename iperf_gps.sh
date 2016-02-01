@@ -56,7 +56,7 @@ while getopts ":i:w:h" opts; do
 done
 
 # Verify if all command line arguments are specified
-if [ -z "${i}" ] || [ -z ${w} ]; then
+if [ -z "${i}" ] || [ -z "${w}" ]; then
         usage
 fi
 
