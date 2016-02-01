@@ -1,6 +1,12 @@
 #!/bin/bash
 
-source ./config.ini
+# Look for config file
+if [ -e ./config.ini ]; then
+        source ./config.ini
+else
+        echo -e "\nWARNING: config.ini not found, using defaults!\n";
+        source ./config.ini.default
+fi
 
 # Verify if this script is running as root and if not exit
 if [ "$(id -u)" != "0" ]; then
@@ -48,7 +54,7 @@ if [[ $wifi_list =~ .*wlan.* ]]; then
         if [ "$wifi_interface" = "" ]; then
                 wifi_interface="wlan0"
         fi
-        echo -e "NOTE: Setting Wifi interface to $wifi_interface ...Ok"
+        echo -e "NOTE: Setting Wifi interface to $wifi_interface...Ok"
 else
         echo "None found!"
 fi
