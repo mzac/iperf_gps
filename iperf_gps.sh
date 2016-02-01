@@ -2,7 +2,7 @@
 
 # Verify if this script is running as root and if not exit
 if [ "$(id -u)" != "0" ]; then
-        echo -n "\nERROR: This script must be run as root!\n" 1>&2
+        echo -e "\nERROR: This script must be run as root\!\n"
         exit 1
 fi
 
