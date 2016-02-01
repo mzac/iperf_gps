@@ -9,18 +9,26 @@ fi
 # Prints usage
 usage() { 
         echo -e "\nUsage:"
-        echo -e "$0 -i <server_ip> -w <base_filename>\n"
+        echo -e "$0 -i [server_ip] -w [base_filename]\n"
+        echo -e "Required:\n"
+        echo -e "-i [server_ip]\t\tIP Address of the iPerf Server"
+        echo -e "-w [base_filename]\tText that will be included in the filename\n"
+        echo -e "Optional:\n"
+        echo -e "-m\t\t\tRun through tests manually (no sleep)"
         exit 0
 }
 
 # Get command line arguments
-while getopts ":i:w:h" opts; do
+while getopts ":i:w:hm" opts; do
         case "${opts}" in
         i)
                 iperf_server=${OPTARG}
                 ;;
         w)
                 base_filename=${OPTARG}
+                ;;
+        m)
+                manual_run=1
                 ;;
         h | *)
                 usage
@@ -304,13 +312,19 @@ do
                 echo "ERROR: No GPS fix, not running tests!"
         fi
 
-        echo -e "NOTE: Sleeping for $update_interval seconds..."
-        update_interval_tmp="$update_interval"
-        while [ $update_interval_tmp -gt 0 ]; do
-                echo -ne "$update_interval_tmp...\033[0K\r"
-                sleep 1
-                : $((update_interval_tmp--))
-        done
+        if [ $manual_run -ne 1 ]; then
+                echo -e "NOTE: Sleeping for $update_interval seconds..."
+                update_interval_tmp="$update_interval"
+                while [ $update_interval_tmp -gt 0 ]; do
+                        echo -ne "$update_interval_tmp...\033[0K\r"
+                        sleep 1
+                        : $((update_interval_tmp--))
+                done
+        else
+                echo -e "NOTE: Press [ENTER] when ready to run next test..."
+                done
+        fi
+
         echo -e "--------------------------------------------------------------------------------\033[0K\r"
 
         # Clear all vars
