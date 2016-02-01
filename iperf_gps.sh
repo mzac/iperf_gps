@@ -110,12 +110,16 @@ test_id=1
 while true
 do
         # Get GPS Data in JSON format from gpsd
+        echo -ne "Looking for current location..."
         tpv=$($gpspipe_bin -w -n 5 | grep -m 1 TPV | python -mjson.tool 2>/dev/null)
         lon=$(echo "$tpv" | grep "lon" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
         lat=$(echo "$tpv" | grep "lat" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
 
         # Check if lon and lat are set
         if [ ! -z "$lon" -a ! -z "$lat" ]; then
+                
+                # If location found
+                echo "Ok"
                 
                 # Get the rest of the GPS data
                 gps_date=$(echo "$tpv" | grep "time" | cut -d: -f2 | cut -dT -f1 | cut -d, -f1 | tr -d ' ' | tr -d '"')
@@ -163,7 +167,25 @@ do
                         echo -ne "NOTE: Check if we are connected to Wifi..."
                         wifi_connection_status=`/sbin/iw dev $wifi_interface link | grep "Connected to" | cut -d ' ' -f 1,2`
                         if [ $wifi_connection_status == "Connected to" ]; then
-                                echo "Ok"
+                                echo -e "Ok\n"
+                                
+                                # Get Wifi data
+                                wifi_iw_link=`/sbin/iw dev $wifi_interface link`
+                                wifi_bssid=`echo $wifi_iw_link | grep "Connected to" | cut -d ' ' -f3`
+                                wifi_ssid=`echo $wifi_iw_link | grep "SSID" | cut -d ' ' -f2`
+                                wifi_freq=`echo $wifi_iw_link | grep "freq" | cut -d ' ' -f2`
+                                
+                                wifi_iw_station_dump=`/sbin/iw dev $wifi_interface station dump`
+                                wifi_signal=`echo $wifi_iw_station_dump | grep "signal:" | tr -d '\t' | cut -d ' ' -f3,4`
+                                wifi_tx_rate=`echo $wifi_iw_station_dump | grep "tx bitrate:" | tr -d '\t' | awk -F':' '{print $NF}'
+                                wifi_rx_rate=`echo $wifi_iw_station_dump | grep "rx bitrate:" | tr -d '\t' | awk -F':' '{print $NF}'`
+                                
+                                echo -e "Wifi SSID:\t\t$wifi_ssid"
+                                echo -e "Wifi BSSID:\t\t$wifi_bssid"
+                                echo -e "Wifi Freq:\t\t$wifi_freq"
+                                echo -e "Wifi Signal:\t\t$wifi_signal"
+                                echo -e "Wifi TX Rate:\t$wifi_tx_rate"
+                                echo -e "Wifi RX Rate:\t$wifi_rx_rate\n"
                         else
                                 echo "Not connected!"
                         fi
@@ -260,7 +282,15 @@ do
         unset track
         
         unset wifi_connection_status
-        
+        unset wifi_iw_link
+        unset wifi_iw_station_dump
+        unset wifi_bssid
+        unset wifi_ssid
+        unset wifi_freq
+        unset wifi_signal
+        unset wifi_tx_rate
+        unset wifi_rx_rate
+                                
         unset ping_result
         unset ping_result_min
         unset ping_result_avg
