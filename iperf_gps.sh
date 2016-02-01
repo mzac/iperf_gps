@@ -58,6 +58,7 @@ done
 # Verify if all command line arguments are specified
 if [ -z "${i}" ] || [ -z ${w} ]; then
         usage
+        exit 0
 fi
 
 echo -e "\n--------------------------------------------------------------------------------"
