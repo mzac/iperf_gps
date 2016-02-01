@@ -37,6 +37,7 @@ fi
 usage() { 
         echo -e "\nUsage:"
         echo -e "$0 -i <server_ip> -w <base_filename>\n"
+        exit 0
 }
 
 # Get command line arguments
@@ -50,7 +51,6 @@ while getopts ":i:w:h" opts; do
                 ;;
         h | *)
                 usage
-                exit 0
                 ;;
         esac
 done
@@ -58,7 +58,6 @@ done
 # Verify if all command line arguments are specified
 if [ -z "${i}" ] || [ -z ${w} ]; then
         usage
-        exit 0
 fi
 
 echo -e "\n--------------------------------------------------------------------------------"
