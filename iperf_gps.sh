@@ -186,6 +186,7 @@ do
                                 echo -e "Wifi Signal:\t\t$wifi_signal"
                                 echo -e "Wifi TX Rate:\t\t$wifi_tx_rate"
                                 echo -e "Wifi RX Rate:\t\t$wifi_rx_rate\n"
+                                wifi_disconnected=0
                         else
                                 echo "ERROR!"
                                 echo "ERROR: Wifi is disconnected, settings results to 0!"
