@@ -33,15 +33,26 @@ if [ $? -ne 0 ]; then
         exit 1
 fi
 
-# Verify that the iPerf server and base filename for output is specified
-if [ -z $1 -a -z $2 ]; then
+# Prints usage
+usage() { 
         echo -e "\nUsage:"
-        echo -e "$0 <server_ip> <base_filename>\n"
-        exit 1
-else
-        # iPerf server to connect to
-        iperf_server="$1"
-fi
+        echo -e "$0 -i <server_ip> -w <base_filename>\n"
+}
+
+# Get command line arguments
+while getopts ":i:w:" opts; do
+        case "${opts}" in
+        i)
+                iperf_server=${OPTARG}
+                ;;
+        w)
+                base_filename=${OPTARG}
+                ;;
+        *)
+                usage
+                ;;
+        esac
+done
 
 echo -e "\n--------------------------------------------------------------------------------"
 
@@ -98,7 +109,7 @@ fi
 
 # Set the timestamp and filename for the exported data
 export_file_timestamp=`date +%Y-%m-%dT%H:%M:%S%z`
-export_file_name="$iperf_server-$2-$export_file_timestamp.csv"
+export_file_name="$iperf_server-$base_filename-$export_file_timestamp.csv"
 
 # Verify if the export file already exists
 if [ ! -e "$export_file_name" ]; then
