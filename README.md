@@ -16,6 +16,7 @@ This script lets you run iPerf from a Linux computer to a remote iPerf server wh
 root@pi:~# apt-get install gpsd gpsd-clients iperf
 root@pi:~# git clone https://github.com/mzac/iperf_gps.git
 root@pi:~# cd iperf_gps
+root@pi:~# cp config.ini.default config.ini
 root@pi:~# ./iperf_gps.sh
 ```
 
