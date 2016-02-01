@@ -1,0 +1,84 @@
+start iperf_gps.sh;
+switch(Running as Root) {
+  case Yes:goto config_check;
+  case No:goto exit1;
+}
+
+config_check:
+switch(Check Config File) {
+  case Yes:use config.ini;
+  case No:use config.ini.default;
+  goto verify;
+}
+
+verify:
+if (iPerf Installed){
+  if (gpspipe Installed){
+    if (gpsd Running){
+      if (Verify CLI 
+      Options){
+        if (
+          Verify If We 
+          Have Any Wifi 
+          Interfaces){
+            Select Wifi Interface;
+        }
+        if (Ping iPerf Server){
+          if (Test iPerf
+          Port){
+            Create Export File
+            and Add Headers;
+            goto start_loop;
+          }  else {goto exit1;}
+        }  else {goto exit1;}
+      }  else {goto exit1;}
+    } else {goto exit1;}
+  }  else {goto exit1;}
+}  else {goto exit1;}
+;  
+
+
+start_loop:
+switch(Start Loop) {
+  if (Gather Current
+  GPS Location){
+    switch(Wifi Enabled){
+      case Yes:
+        if (Wifi Status){
+          goto check_results;
+        } else {
+          goto sleep10;
+        }
+      case No:
+        goto check_results;
+    }
+    return;
+  } else {
+    goto sleep10;
+  }
+}
+  
+;
+
+check_results:
+  if (Ping Server){
+    Gather Ping Results;
+    Gather iPerf Results;
+    Write Results to File;
+    goto sleep10;
+  }
+  else {
+    goto sleep10;
+  }
+  return;
+;
+
+sleep10:
+  Sleep for 10 Seconds;
+  goto start_loop;
+  return;
+;
+
+exit1:
+  exit 1;
+;
