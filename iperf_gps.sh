@@ -101,7 +101,7 @@ echo -e "NOTE: Writing CSV data to $export_file_name"
 echo "--------------------------------------------------------------------------------"
 
 # Print CSV header to file
-echo "test_id,date,time,longitude,latitude,altitude,speed,track,iperf_server,ping_min,ping_avg,ping_max,ping_mdev,iperf_test_interval,iperf_client_bytes,iperf_client_bps,iperf_server_bytes,iperf_server_bps" > $export_file_name
+echo "test_id,date,time,longitude,latitude,altitude,speed,track,iperf_server,wifi_bssid,wifi_ssid,wifi_freq,wifi_signal,wifi_tx_rate,wifi_rx_rate,ping_min,ping_avg,ping_max,ping_mdev,iperf_test_interval,iperf_client_bytes,iperf_client_bps,iperf_server_bytes,iperf_server_bps" > $export_file_name
 
 # Set test_id to zero
 test_id=1
@@ -163,8 +163,8 @@ do
                 echo -e "GPS Track:\t\t$track Degrees\n"
 
                 # Verify if we have a Wifi connection
-                if [ -z "$wifi_interface" ]; then
-                        echo -ne "NOTE: Check if we are connected to Wifi..."
+                if [ -n "$wifi_interface" ]; then
+                        echo -ne "NOTE: Check if we are still connected to Wifi..."
                         wifi_connection_status=`/sbin/iw dev $wifi_interface link | grep "Connected to" | cut -d ' ' -f 1,2`
                         if [ $wifi_connection_status == "Connected to" ]; then
                                 echo -e "Ok\n"
@@ -250,7 +250,7 @@ do
                         echo -e "iPerf Server BPS\t$iperf_result_server_bps"
                 fi
                 echo -ne "\nNOTE: Writing results to file..."
-                echo "$test_id,$gps_date,$gps_time,$lon,$lat,$alt,$spd,$track,$iperf_server,$ping_result_min,$ping_result_avg,$ping_result_max,$ping_result_mdev,$iperf_test_interval,$iperf_result_client_bytes,$iperf_result_client_bps,$iperf_result_server_bytes,$iperf_result_server_bps" >> $export_file_name
+                echo "$test_id,$gps_date,$gps_time,$lon,$lat,$alt,$spd,$track,$iperf_server,$wifi_bssid,$wifi_ssid,$wifi_freq,$wifi_signal,$wifi_tx_rate,$wifi_rx_rate,$ping_result_min,$ping_result_avg,$ping_result_max,$ping_result_mdev,$iperf_test_interval,$iperf_result_client_bytes,$iperf_result_client_bps,$iperf_result_server_bytes,$iperf_result_server_bps" >> $export_file_name
                 if [ $? -eq 0 ]; then
                         echo "Ok"
                         ((test_id++))
