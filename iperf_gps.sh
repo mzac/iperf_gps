@@ -40,11 +40,11 @@ fi
 if [ -e $gpsd_pid_file ]; then
         gpsd_pid=`cat $gpsd_pid_file`
         if [ ! -e /proc/$gpsd_pid/exe ]; then
-                echo "ERROR: GPSD is not running, please make sure to start it!"
+                echo "\nERROR: GPSD is not running, please make sure to start it!\n"
                 exit 1
         fi
 else
-        echo "ERROR: Cannot find GPSD PID file!"
+        echo -e "\nERROR: Cannot find GPSD PID file!\n"
         exit 1
 fi
 
