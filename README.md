@@ -74,3 +74,4 @@ You will then be able to parse the CSV file created however you wish.
 - [ ] Create CSV to KML script
 - [x] Add in ICMP checks
 - [x] Verify iPerf server is up and working before running tests
+- [x] Add Wifi tests (SSID, BSSID, Signal, etc)
