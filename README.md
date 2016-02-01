@@ -25,7 +25,7 @@ root@pi:~# ./iperf_gps.sh
 ## Example:
 
 ```
-root@pi:~# ./iperf_gps.sh 10.0.0.10 vehicle1
+root@pi:~# ./iperf_gps.sh -i 10.0.0.10 -w vehicle1
 
 --------------------------------------------------------------------------------
 NOTE: Running ICMP ping to see if server is alive...Ok
@@ -71,6 +71,7 @@ When you are finished with your tests, stop the script with `CTRL-C`
 You will then be able to parse the CSV file created however you wish.
 
 ## Roadmap
+- [ ] Verify if iPerf server is capable of bidirectional test (need to add in timeout in initial setup test)
 - [ ] Create CSV to KML script
 - [x] Add in ICMP checks
 - [x] Verify iPerf server is up and working before running tests
