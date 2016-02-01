@@ -45,18 +45,31 @@ fi
 
 echo -e "\n--------------------------------------------------------------------------------"
 
-# Verify if we are on Wifi
-echo -ne "NOTE: Verify if we are on Wifi..."
+# Verify if we have wifi and we want to use it
+echo -ne "NOTE: Verify if have Wifi..."
 wifi_list=`/bin/netstat -i | grep wlan | cut -d ' ' -f1 | tr '\n' ' '`
 if [[ $wifi_list =~ .*wlan.* ]]; then
-        echo "Ok"
-        read -p "NOTE: Select Wifi interface to use (wlan0 default) [${wifi_list%?}]: " wifi_interface
-        if [ "$wifi_interface" = "" ]; then
-                wifi_interface="wlan0"
-        fi
-        echo -e "NOTE: Setting Wifi interface to $wifi_interface...Ok"
+        echo "Ok\n"
+        use_wifi="y"
+        read -p "NOTE: Use Wifi (y/n) [y]: " use_wifi
+        case "$use_wifi" in
+                [yY])
+                        read -p "NOTE: Select Wifi interface to use (wlan0 default) [${wifi_list%?}]: " wifi_interface
+                        if [ "$wifi_interface" = "" ]; then
+                                wifi_interface="wlan0"
+                        fi
+                                echo -e "NOTE: Setting Wifi interface to $wifi_interface...Ok"
+                        fi
+                        ;;
+                [nN])
+                        echo -e "NOTE: Not using Wifi..."
+                        ;;
+                *)
+                        echo "Invalid input!"
+                        ;;
+        esac
 else
-        echo "None Wifi interfaces found!"
+        echo "No Wifi interfaces found!"
 fi
 
 # Verify that the iPerf server is alive with ICMP
