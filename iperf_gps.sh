@@ -187,16 +187,22 @@ do
                                 echo -e "Wifi TX Rate:\t\t$wifi_tx_rate"
                                 echo -e "Wifi RX Rate:\t\t$wifi_rx_rate\n"
                         else
-                                echo "Not connected!"
+                                echo "ERROR!"
+                                echo "ERROR: Wifi is disconnected, settings results to 0!"
+                                wifi_disconnected=1
                         fi
                 fi
 
                 # Verify that the iPerf server is alive with ICMP, if not skip iperf test and set results to zero
-                echo -ne "NOTE: Check if server is still alive..."
+                if [ $wifi_disconnected -ne 1 ]; then
+                        echo -ne "NOTE: Check if server is still alive..."
+                fi
                 /bin/ping -n -c 1 -w 5 $iperf_server > /dev/null
-                if [ $? -ne 0 ]; then
-                        echo "ERROR"
-                        echo "ERROR: iPerf server $iperf_server is down - via ICMP ping, setting iPerf results to 0!"
+                if [ $? -ne 0 ] || [ $wifi_disconnected -eq 1 ]; then
+                        if [ $wifi_disconnected -ne 1 ]; then
+                                echo "ERROR"
+                                echo "ERROR: iPerf server $iperf_server is down - via ICMP ping, setting iPerf results to 0!"
+                        fi
                         
                         ping_result_min="0"
                         ping_result_avg="0"
@@ -290,6 +296,7 @@ do
         unset wifi_signal
         unset wifi_tx_rate
         unset wifi_rx_rate
+        unset wifi_disconnected
                                 
         unset ping_result
         unset ping_result_min
