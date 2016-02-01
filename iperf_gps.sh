@@ -50,25 +50,28 @@ echo -ne "NOTE: Verify if have Wifi..."
 wifi_list=`/bin/netstat -i | grep wlan | cut -d ' ' -f1 | tr '\n' ' '`
 if [[ $wifi_list =~ .*wlan.* ]]; then
         echo -e "Ok\n"
-        read -p "NOTE: Use Wifi (y/n) [y]: " use_wifi
-        if [ -z "$use_wifi" ]; then
-                use_wifi="y"
-        fi
-        case "$use_wifi" in
-                y*|Y*)
-                        read -p "NOTE: Select Wifi interface to use (wlan0 default) [${wifi_list%?}]: " wifi_interface
-                        if [ "$wifi_interface" = "" ]; then
-                                wifi_interface="wlan0"
-                                echo -e "NOTE: Setting Wifi interface to $wifi_interface...Ok"
-                        fi
-                ;;
-                n*|N*)
-                        echo -e "NOTE: Not using Wifi..."
-                ;;
-                *)
-                        echo "Invalid input!"
-                ;;
-        esac
+        while read -p "NOTE: Use Wifi (y/n) [y]: " use_wifi
+                if [ -z "$use_wifi" ]; then
+                        use_wifi="y"
+                fi
+                case "$use_wifi" in
+                        y*|Y*)
+                                read -p "NOTE: Select Wifi interface to use (wlan0 default) [${wifi_list%?}]: " wifi_interface
+                                if [ "$wifi_interface" = "" ]; then
+                                        wifi_interface="wlan0"
+                                        echo -e "NOTE: Setting Wifi interface to $wifi_interface...Ok"
+                                        break
+                                fi
+                        ;;
+                        n*|N*)
+                                echo -e "NOTE: Not using Wifi...Ok"
+                                break
+                        ;;
+                        *)
+                                echo -e "ERROR: Invalid input!\n"
+                        ;;
+                esac
+        done
 else
         echo "No Wifi interfaces found!"
 fi
