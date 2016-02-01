@@ -184,8 +184,8 @@ do
                                 echo -e "Wifi BSSID:\t\t$wifi_bssid"
                                 echo -e "Wifi Freq:\t\t$wifi_freq"
                                 echo -e "Wifi Signal:\t\t$wifi_signal"
-                                echo -e "Wifi TX Rate:\t$wifi_tx_rate"
-                                echo -e "Wifi RX Rate:\t$wifi_rx_rate\n"
+                                echo -e "Wifi TX Rate:\t\t$wifi_tx_rate"
+                                echo -e "Wifi RX Rate:\t\t$wifi_rx_rate\n"
                         else
                                 echo "Not connected!"
                         fi
