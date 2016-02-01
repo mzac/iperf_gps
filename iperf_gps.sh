@@ -1,28 +1,6 @@
 #!/bin/bash
 
-# How many seconds to run the iPerf test
-iperf_test_interval=5
-
-# How many seconds to sleep between tests
-update_interval=10
-
-# Location of iPerf binary
-iperf_bin="/usr/bin/iperf"
-
-# The port to connect to iPerf (5001 default)
-iperf_port=5001
-
-# How long to run the iPerf test
-iperf_time=5
-
-# Location of gpspipe binary
-gpspipe_bin="/usr/bin/gpspipe"
-
-# Location of gpsd PID
-gpsd_pid_file="/var/run/gpsd.pid"
-
-# --------------------------------------------------------------------------------
-# Do not change any settings below this line
+source ./config.ini
 
 # Verify if iPerf is installed
 if [ ! -x $iperf_bin ]; then
