@@ -1,17 +1,17 @@
 #!/bin/bash
 
+# Verify if this script is running as root and if not exit
+if [ "$(id -u)" != "0" ]; then
+        echo -n "\nERROR: This script must be run as root!\n" 1>&2
+        exit 1
+fi
+
 # Look for config file
 if [ -e ./config.ini ]; then
         source ./config.ini
 else
         echo -e "\nWARNING: config.ini not found, using defaults!";
         source ./config.ini.default
-fi
-
-# Verify if this script is running as root and if not exit
-if [ "$(id -u)" != "0" ]; then
-        echo -n "\nERROR: This script must be run as root!\n" 1>&2
-        exit 1
 fi
 
 # Verify if gpspipe is installed
