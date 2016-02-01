@@ -40,10 +40,14 @@ fi
 echo -e "\n--------------------------------------------------------------------------------"
 
 # Verify if we are on wireless
-echo -e "NOTE: Verify if we are on wireless..."
-wlan_list=`/bin/netstat -i | grep wlan | cut -d ' ' -f1 | tr '\n' ' '`
-if [[ $wlan_list =~ .*wlan.* ]]; then
-        echo "Found wifi interfaces"
+echo -ne "NOTE: Verify if we are on wireless..."
+wifi_list=`/bin/netstat -i | grep wlan | cut -d ' ' -f1 | tr '\n' ' '`
+if [[ $wifi_list =~ .*wlan.* ]]; then
+        echo "Ok"
+        echo -ne "NOTE: Select Wifi interface to use [$wlan_list]: "
+        read wifi_interface
+else
+        echo "None found!"
 fi
 
 # Verify that the iPerf server is alive with ICMP
@@ -144,7 +148,7 @@ do
                 echo -e "GPS Track:\t\t$track Degrees\n"
 
                 # Verify that the iPerf server is alive with ICMP, if not skip iperf test and set results to zero
-                echo -en "NOTE: Check if server is still alive..."
+                echo -ne "NOTE: Check if server is still alive..."
                 /bin/ping -n -c 1 -w 5 $iperf_server > /dev/null
                 if [ $? -ne 0 ]; then
                         echo "ERROR"
