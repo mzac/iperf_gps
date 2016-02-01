@@ -4,7 +4,7 @@
 if [ -e ./config.ini ]; then
         source ./config.ini
 else
-        echo -e "\nWARNING: config.ini not found, using defaults!\n";
+        echo -e "\nWARNING: config.ini not found, using defaults!";
         source ./config.ini.default
 fi
 
@@ -45,8 +45,8 @@ fi
 
 echo -e "\n--------------------------------------------------------------------------------"
 
-# Verify if we are on wireless
-echo -ne "NOTE: Verify if we are on wireless..."
+# Verify if we are on Wifi
+echo -ne "NOTE: Verify if we are on Wifi..."
 wifi_list=`/bin/netstat -i | grep wlan | cut -d ' ' -f1 | tr '\n' ' '`
 if [[ $wifi_list =~ .*wlan.* ]]; then
         echo "Ok"
@@ -56,7 +56,7 @@ if [[ $wifi_list =~ .*wlan.* ]]; then
         fi
         echo -e "NOTE: Setting Wifi interface to $wifi_interface...Ok"
 else
-        echo "None found!"
+        echo "None Wifi interfaces found!"
 fi
 
 # Verify that the iPerf server is alive with ICMP
@@ -111,17 +111,19 @@ while true
 do
         # Get GPS Data in JSON format from gpsd
         tpv=$($gpspipe_bin -w -n 5 | grep -m 1 TPV | python -mjson.tool 2>/dev/null)
-        gps_date=$(echo "$tpv" | grep "time" | cut -d: -f2 | cut -dT -f1 | cut -d, -f1 | tr -d ' ' | tr -d '"')
-        gps_time=$(echo "$tpv" | grep "time" | cut -dT -f2 | cut -d. -f1 | cut -d, -f1 | tr -d ' ')
         lon=$(echo "$tpv" | grep "lon" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
         lat=$(echo "$tpv" | grep "lat" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
-        alt=$(echo "$tpv" | grep "alt" | cut -d: -f2 | cut -d, -f1 | tr -d ' ' | awk '{print int($1)}')
-        spd=$(echo "$tpv" | grep "speed" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
-        track=$(echo "$tpv" | grep "track" | cut -d: -f2 | cut -d, -f1 | tr -d ' ' | awk '{print int($1)}')
 
         # Check if lon and lat are set
         if [ ! -z "$lon" -a ! -z "$lat" ]; then
                 
+                # Get the rest of the GPS data
+                gps_date=$(echo "$tpv" | grep "time" | cut -d: -f2 | cut -dT -f1 | cut -d, -f1 | tr -d ' ' | tr -d '"')
+                gps_time=$(echo "$tpv" | grep "time" | cut -dT -f2 | cut -d. -f1 | cut -d, -f1 | tr -d ' ')
+                alt=$(echo "$tpv" | grep "alt" | cut -d: -f2 | cut -d, -f1 | tr -d ' ' | awk '{print int($1)}')
+                spd=$(echo "$tpv" | grep "speed" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
+                track=$(echo "$tpv" | grep "track" | cut -d: -f2 | cut -d, -f1 | tr -d ' ' | awk '{print int($1)}')
+
                 echo -e "NOTE: Test sequence number: $test_id"
                 
                 # Convert speed from meters per second to kilometers per hour
@@ -155,6 +157,17 @@ do
                 echo -e "GPS Altitude:\t\t$alt Meters"
                 echo -e "GPS Speed:\t\t$spd km/h"
                 echo -e "GPS Track:\t\t$track Degrees\n"
+
+                # Verify if we have a Wifi connection
+                if [ -z "$wifi_interface" ]; then
+                        echo -ne "NOTE: Check if we are connected to Wifi..."
+                        wifi_connection_status=`/sbin/iw dev $wifi_interface link | grep "Connected to" | cut -d ' ' -f 1,2`
+                        if [ $wifi_connection_status == "Connected to" ]; then
+                                echo "Ok"
+                        else
+                                echo "Not connected!"
+                        fi
+                fi
 
                 # Verify that the iPerf server is alive with ICMP, if not skip iperf test and set results to zero
                 echo -ne "NOTE: Check if server is still alive..."
@@ -245,11 +258,15 @@ do
         unset alt
         unset spd
         unset track
+        
+        unset wifi_connection_status
+        
         unset ping_result
         unset ping_result_min
         unset ping_result_avg
         unset ping_result_max
         unset ping_result_mdev
+        
         unset iperf_result
         unset iperf_result_server
         unset iperf_result_client_bytes
