@@ -6,6 +6,33 @@ if [ "$(id -u)" != "0" ]; then
         exit 1
 fi
 
+# Prints usage
+usage() { 
+        echo -e "\nUsage:"
+        echo -e "$0 -i <server_ip> -w <base_filename>\n"
+        exit 0
+}
+
+# Get command line arguments
+while getopts ":i:w:h" opts; do
+        case "${opts}" in
+        i)
+                iperf_server=${OPTARG}
+                ;;
+        w)
+                base_filename=${OPTARG}
+                ;;
+        h | *)
+                usage
+                ;;
+        esac
+done
+
+# Verify if all command line arguments are specified
+if [ -z "${i}" ] || [ -z "${w}" ]; then
+        usage
+fi
+
 # Look for config file
 if [ -e ./config.ini ]; then
         source ./config.ini
@@ -33,32 +60,6 @@ if [ $? -ne 0 ]; then
         exit 1
 fi
 
-# Prints usage
-usage() { 
-        echo -e "\nUsage:"
-        echo -e "$0 -i <server_ip> -w <base_filename>\n"
-        exit 0
-}
-
-# Get command line arguments
-while getopts ":i:w:h" opts; do
-        case "${opts}" in
-        i)
-                iperf_server=${OPTARG}
-                ;;
-        w)
-                base_filename=${OPTARG}
-                ;;
-        h | *)
-                usage
-                ;;
-        esac
-done
-
-# Verify if all command line arguments are specified
-if [ -z "${i}" ] || [ -z "${w}" ]; then
-        usage
-fi
 
 echo -e "\n--------------------------------------------------------------------------------"
 
