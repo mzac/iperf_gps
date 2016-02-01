@@ -15,6 +15,3 @@ iperf_time=5
 
 # Location of gpspipe binary
 gpspipe_bin="/usr/bin/gpspipe"
-
-# Location of gpsd PID
-gpsd_pid_file="/var/run/gpsd.pid"
