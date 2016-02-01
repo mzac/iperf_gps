@@ -10,8 +10,10 @@ This script lets you run iPerf from a Linux computer to a remote iPerf server wh
 - Netcat https://en.wikipedia.org/wiki/Netcat
 - Python https://www.python.org/
 - A GPS connected to your computer
+- Wireless 'iw' tools https://wireless.wiki.kernel.org/en/users/documentation/iw
 
 ### Debian install:
+As Root:
 ```
 root@pi:~# apt-get install gpsd gpsd-clients iperf
 root@pi:~# git clone https://github.com/mzac/iperf_gps.git
