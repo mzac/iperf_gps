@@ -2,6 +2,12 @@
 
 source ./config.ini
 
+# Verify if this script is running as root and if not exit
+if [ "$(id -u)" != "0" ]; then
+        echo -n "\nERROR: This script must be run as root!\n" 1>&2
+        exit 1
+fi
+
 # Verify if iPerf is installed
 if [ ! -x $iperf_bin ]; then
         echo -e "\nERROR: iPerf binary not found or is not executable!\n";
@@ -15,14 +21,9 @@ if [ ! -x $gpspipe_bin ]; then
 fi
 
 # Verify if gpsd is running
-if [ -e $gpsd_pid_file ]; then
-        gpsd_pid=`cat $gpsd_pid_file`
-        if [ ! -e /proc/$gpsd_pid/exe ]; then
-                echo "\nERROR: GPSD is not running, please make sure to start it!\n"
-                exit 1
-        fi
-else
-        echo -e "\nERROR: Cannot find GPSD PID file!\n"
+gpsd_pid=`ps cax | grep gpsd`
+if [ $? -ne 0 ]; then
+        echo "\nERROR: GPSD is not running, please make sure to start it!\n"
         exit 1
 fi
 
@@ -37,6 +38,10 @@ else
 fi
 
 echo -e "\n--------------------------------------------------------------------------------"
+
+# Verify if we are on wireless
+wlan_list=`/bin/netstat -i | grep wlan | cut -d ' ' -f1 | tr '\n' ' '`
+
 
 # Verify that the iPerf server is alive with ICMP
 echo -ne "NOTE: Running ICMP ping to see if server is alive..."
