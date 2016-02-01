@@ -177,7 +177,7 @@ do
                                 
                                 wifi_iw_station_dump=`/sbin/iw dev $wifi_interface station dump`
                                 wifi_signal=`echo $wifi_iw_station_dump | grep "signal:" | tr -d '\t' | cut -d ' ' -f3,4`
-                                wifi_tx_rate=`echo $wifi_iw_station_dump | grep "tx bitrate:" | tr -d '\t' | awk -F':' '{print $NF}'
+                                wifi_tx_rate=`echo $wifi_iw_station_dump | grep "tx bitrate:" | tr -d '\t' | awk -F':' '{print $NF}'`
                                 wifi_rx_rate=`echo $wifi_iw_station_dump | grep "rx bitrate:" | tr -d '\t' | awk -F':' '{print $NF}'`
                                 
                                 echo -e "Wifi SSID:\t\t$wifi_ssid"
