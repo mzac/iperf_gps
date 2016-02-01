@@ -2,6 +2,8 @@
 
 This script lets you run iPerf from a Linux computer to a remote iPerf server while keeping track of your location using a GPS.
 
+It will also collect Ping tests data as well as Wireless Wifi statistics if you are on Wifi.
+
 ## Requirements:
 
 - Linux
