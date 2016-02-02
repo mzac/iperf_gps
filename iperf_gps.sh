@@ -11,7 +11,7 @@ usage() {
         echo -e "\nUsage:"
         echo -e "$0 -i [server_ip]\n"
         echo -e "Required:\n"
-        echo -e "-i [server_ip]\t\tIP Address of the iPerf Server"
+        echo -e "-i [server_ip]\t\tIP Address or Hostname of the iPerf Server"
         echo -e "\nOptional:\n"
         echo -e "-h\t\t\tThis help"
         echo -e "-m\t\t\tRun through tests manually (no sleep)"
