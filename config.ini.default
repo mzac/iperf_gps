@@ -1,14 +1,8 @@
 # How many seconds to run the iPerf test
 iperf_test_interval=5
 
-# How many seconds to sleep between tests
-update_interval=10
-
 # Location of iPerf binary
 iperf_bin="/usr/bin/iperf"
-
-# The port to connect to iPerf (5001 default)
-iperf_port=5001
 
 # How long to run the iPerf test
 iperf_time=5
