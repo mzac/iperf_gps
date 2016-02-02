@@ -36,7 +36,7 @@ Usage:
 
 Required:
 
--i [server_ip]          IP Address of the iPerf Server
+-i [server_ip]          IP Address or Hostname of the iPerf Server
 
 Optional:
 
