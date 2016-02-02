@@ -186,9 +186,18 @@ while true
 do
         # Get GPS Data in JSON format from gpsd
         echo -ne "Looking for current location..."
-        tpv=$($gpspipe_bin -w -n 5 | grep -m 1 TPV | python -mjson.tool 2>/dev/null)
-        lon=$(echo "$tpv" | grep "lon" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
-        lat=$(echo "$tpv" | grep "lat" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
+        while true
+        do
+                tpv=$($gpspipe_bin -w -n 5 | grep -m 1 TPV | python -mjson.tool 2>/dev/null)
+                lon=$(echo "$tpv" | grep "lon" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
+                lat=$(echo "$tpv" | grep "lat" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
+                
+                if [ ! -z "$lon" -a ! -z "$lat" ]; then
+                        break
+                else
+                        echo -ne "."
+                fi
+        done
 
         # Check if lon and lat are set
         if [ ! -z "$lon" -a ! -z "$lat" ]; then
