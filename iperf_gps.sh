@@ -13,7 +13,7 @@ usage() {
         echo -e "Required:\n"
         echo -e "-i [server_ip]\t\tIP Address of the iPerf Server"
         echo -e "Optional:\n"
-        echo -e "-m\t\t\tRun through tests manually (no sleep)\n"
+        echo -e "-m\t\t\tRun through tests manually (no sleep)"
         echo -e "-u\t\t\tRun iPerf with UDP tests (default is TCP)"
         echo -e "-w [base_filename]\tText that will be included in the filename\n"
         exit 0
