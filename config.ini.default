@@ -1,11 +1,5 @@
-# How many seconds to run the iPerf test
-iperf_test_interval=5
-
 # Location of iPerf binary
 iperf_bin="/usr/bin/iperf"
-
-# How long to run the iPerf test
-iperf_time=5
 
 # Location of gpspipe binary
 gpspipe_bin="/usr/bin/gpspipe"
