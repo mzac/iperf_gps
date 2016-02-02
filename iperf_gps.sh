@@ -14,22 +14,39 @@ usage() {
         echo -e "-i [server_ip]\t\tIP Address of the iPerf Server"
         echo -e "Optional:\n"
         echo -e "-m\t\t\tRun through tests manually (no sleep)"
+        echo -e "-p\t\t\tiPerf port to connect to (default is 5001)"
+        echo -e "-s\t\t\tSleep interval between tests (default is 10 seconds)"
         echo -e "-u\t\t\tRun iPerf with UDP tests (default is TCP)"
         echo -e "-w [base_filename]\tText that will be included in the filename\n"
         exit 0
 }
 
+# --------------------------------------------------------------------------------
+# Set default options
+# How many seconds to sleep between tests
+update_interval=10
+
+# The default iPerf server port
+iperf_port=5001
+
 # Set manual run to 0
 manual_run=0
+# --------------------------------------------------------------------------------
 
 # Get command line arguments
-while getopts ":i:w:hmu" opts; do
+while getopts ":i:p:s:w:hmu" opts; do
         case "${opts}" in
         i)
                 iperf_server=${OPTARG}
                 ;;
         m)
                 manual_run=1
+                ;;
+        p)
+                iperf_port=${OPTARG}
+                ;;
+        s)
+                update_interval=${OPTARG}
                 ;;
         u)
                 iperf_mode="-u"
