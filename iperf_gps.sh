@@ -15,7 +15,7 @@ usage() {
         echo -e "\nOptional:\n"
         echo -e "-m\t\t\tRun through tests manually (no sleep)"
         echo -e "-p [port]\t\tiPerf port to connect to (default is 5001)"
-        echo -e "-s [seconds]\tSleep interval between tests (default is 10 seconds)"
+        echo -e "-s [seconds]\t\tSleep interval between tests (default is 10 seconds)"
         echo -e "-u\t\t\tRun iPerf with UDP tests (default is TCP)"
         echo -e "-w [base_filename]\tText that will be included in the filename\n"
         exit 0
