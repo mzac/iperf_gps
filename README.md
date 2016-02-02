@@ -26,6 +26,7 @@ root@pi:~# git clone https://github.com/mzac/iperf_gps.git
 root@pi:~# cd iperf_gps
 root@pi:~# cp config.ini.default config.ini
 ```
+
 ## Usage:
 ```
 root@pi:~# ./iperf_gps.sh
@@ -47,8 +48,8 @@ Optional:
 -u                      Run iPerf with UDP tests (default is TCP)
 -w [base_filename]      Text that will be included in the filename
 ```
-## Example:
 
+## Example:
 ```
 root@pi:~# ./iperf_gps.sh -i 10.0.0.10
 
@@ -58,37 +59,33 @@ NOTE: Running ICMP ping to see if server is alive...Ok
 NOTE: Running Netcat test to see if iPerf is up on server...Ok
 NOTE: Writing CSV data to 10.0.0.10-2016-01-29T16:35:43+0000.csv
 --------------------------------------------------------------------------------
-```
-
-Once you start the script, it will verify if there is a GPS position, and if so will then run iPerf tests
-
-```
+Looking for current location...Ok
 NOTE: Test sequence number: 1
 
 GPS Date:               2016-01-29
-GPS Time:               16:36:20
-GPS Longitude:          -73.57000000
-GPS Latitude:           45.500000000
-GPS Altitude:           33 Meters
-GPS Speed:              25 km/h
-GPS Track:              132 Degrees
+GPS Time:               16:35:44
+GPS Longitude:          -73.0000000
+GPS Latitude:           45.000000000
+GPS Altitude:           0 Meters
+GPS Speed:              0 km/h
+GPS Track:              0 Degrees
 
 NOTE: Check if server is still alive...Ok
 NOTE: Running ICMP test...Ok
 
-Ping min:               9.004 ms
-Ping avg:               9.699 ms
-Ping max:               10.579 ms
-Ping mdev:              0.547 ms
+Ping min:               13.538 ms
+Ping avg:               16.603 ms
+Ping max:               19.316 ms
+Ping mdev:              2.178 ms
 
-NOTE: Running iPerf test...Ok
+NOTE: Running iPerf test for 5 seconds...Ok
 
-iPerf Client Bytes:     3407872
+iPerf Client Bytes:     3145728
 iPerf Server Bytes:     3670016
-iPerf Client BPS:       5050635
-iPerf Server BPS        4850194
+iPerf Client BPS:       4786759
+iPerf Server BPS        4351867
 
-NOTE: Writing results to file...Ok
+NOTE: Writing results to file [10.0.0.10-2016-01-29T16:35:43+0000.csv] ...Ok
 NOTE: Sleeping for 10 seconds...
 ```
 
