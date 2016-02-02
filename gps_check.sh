@@ -71,7 +71,7 @@ do
                 fi
         done
         
-        echo "Ok\n"
+        echo -e "Ok\n"
         
         gps_date=$(echo "$tpv" | grep "time" | cut -d: -f2 | cut -dT -f1 | cut -d, -f1 | tr -d ' ' | tr -d '"')
         gps_time=$(echo "$tpv" | grep "time" | cut -dT -f2 | cut -d. -f1 | cut -d, -f1 | tr -d ' ')
