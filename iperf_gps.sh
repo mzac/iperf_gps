@@ -362,7 +362,7 @@ do
                         : $((update_interval_tmp--))
                 done
         else
-                read -p "NOTE: Press any key when ready to run next test..."
+                read -p "NOTE: Press [ENTER] when ready to run next test..."
         fi
 
         echo -e "--------------------------------------------------------------------------------\033[0K\r"
