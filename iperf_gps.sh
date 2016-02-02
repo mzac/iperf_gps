@@ -32,7 +32,7 @@ while getopts ":i:w:hmu" opts; do
                 manual_run=1
                 ;;
         u)
-                iperf_mode="udp"
+                iperf_mode="-u"
                 ;;
         w)
                 base_filename="${OPTARG}-"
@@ -288,7 +288,7 @@ do
                         fi
                         
                         echo -ne "\nNOTE: Running iPerf test..."
-                        iperf_result=`$iperf_bin -c $iperf_server -r -t $iperf_test_interval --reportstyle C`
+                        iperf_result=`$iperf_bin $iperf_mode -c $iperf_server -r -t $iperf_test_interval --reportstyle C`
 
                         echo -e "Ok\n"
 
