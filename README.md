@@ -25,6 +25,9 @@ root@pi:~# apt-get install gpsd gpsd-clients iperf
 root@pi:~# git clone https://github.com/mzac/iperf_gps.git
 root@pi:~# cd iperf_gps
 root@pi:~# cp config.ini.default config.ini
+```
+## Usage:
+```
 root@pi:~# ./iperf_gps.sh
 
 Usage:
@@ -43,9 +46,7 @@ Optional:
 -t [seconds]            How long to run iPerf test (default is 5 seconds)
 -u                      Run iPerf with UDP tests (default is TCP)
 -w [base_filename]      Text that will be included in the filename
-
 ```
-
 ## Example:
 
 ```
