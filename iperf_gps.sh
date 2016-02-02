@@ -9,12 +9,13 @@ fi
 # Prints usage
 usage() { 
         echo -e "\nUsage:"
-        echo -e "$0 -i [server_ip] -w [base_filename]\n"
+        echo -e "$0 -i [server_ip]\n"
         echo -e "Required:\n"
         echo -e "-i [server_ip]\t\tIP Address of the iPerf Server"
-        echo -e "-w [base_filename]\tText that will be included in the filename\n"
         echo -e "Optional:\n"
         echo -e "-m\t\t\tRun through tests manually (no sleep)\n"
+        echo -e "-u\t\t\tRun iPerf with UDP tests (default is TCP)"
+        echo -e "-w [base_filename]\tText that will be included in the filename\n"
         exit 0
 }
 
@@ -22,16 +23,19 @@ usage() {
 manual_run=0
 
 # Get command line arguments
-while getopts ":i:w:hm" opts; do
+while getopts ":i:w:hmu" opts; do
         case "${opts}" in
         i)
                 iperf_server=${OPTARG}
                 ;;
-        w)
-                base_filename=${OPTARG}
-                ;;
         m)
                 manual_run=1
+                ;;
+        u)
+                iperf_mode="udp"
+                ;;
+        w)
+                base_filename="${OPTARG}-"
                 ;;
         h | *)
                 usage
@@ -39,8 +43,8 @@ while getopts ":i:w:hm" opts; do
         esac
 done
 
-# Verify if all command line arguments are specified
-if [ -z "$iperf_server" ] || [ -z "$base_filename" ]; then
+# Verify if all required command line arguments are specified
+if [ -z "$iperf_server" ]; then
         usage
 fi
 
