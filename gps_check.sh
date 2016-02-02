@@ -79,6 +79,21 @@ do
         spd=$(echo "$tpv" | grep "speed" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
         track=$(echo "$tpv" | grep "track" | cut -d: -f2 | cut -d, -f1 | tr -d ' ' | awk '{print int($1)}')
 
+        if [ -z "$alt" ]; then
+                echo "WARNING: No GPS altitude - setting to 0 Meters"
+                alt=0
+        fi
+
+        if [ -z "$spd" ]; then
+                echo "WARNING: No GPS speed - setting to 0 km/h"
+                spd=0
+        fi
+
+        if [ -z "$track" ]; then
+                echo "WARNING: No GPS track - setting to 0 Degrees"
+                track=0
+        fi
+
         # Convert speed from meters per second to kilometers per hour
         spd=`echo $spd | awk '{print int($1 * 3.6)}'`
 
