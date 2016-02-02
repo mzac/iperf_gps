@@ -6,6 +6,32 @@ if [ "$(id -u)" != "0" ]; then
         exit 1
 fi
 
+# Prints usage
+usage() {
+        echo -e "\nUsage:"
+        echo -e "-h\t\t\tThis help"
+        echo -e "-s [seconds]\t\tSleep interval between tests (default is 10 seconds)"
+        exit 0
+}
+
+# --------------------------------------------------------------------------------
+# Set default options
+# How many seconds to sleep between tests
+update_interval=10
+# --------------------------------------------------------------------------------
+
+# Get command line arguments
+while getopts ":s:h" opts; do
+        case "${opts}" in
+        s)
+                update_interval=${OPTARG}
+                ;;
+        h | *)
+                usage
+                ;;
+        esac
+done
+
 # Look for config file
 if [ -e ./config.ini ]; then
         source ./config.ini
@@ -31,11 +57,22 @@ fi
 while true
 do
         # Get GPS Data in JSON format from gpsd
-        tpv=$($gpspipe_bin -w -n 5 | grep -m 1 TPV | python -mjson.tool)
+        echo -ne "Looking for current location..."
+        while true
+        do
+                tpv=$($gpspipe_bin -w -n 5 | grep -m 1 TPV | python -mjson.tool)
+                lon=$(echo "$tpv" | grep "lon" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
+                lat=$(echo "$tpv" | grep "lat" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
+                
+                if [ ! -z "$lon" -a ! -z "$lat" ]; then
+                        break
+                else
+                        echo -ne "."
+                fi
+        done
+        
         gps_date=$(echo "$tpv" | grep "time" | cut -d: -f2 | cut -dT -f1 | cut -d, -f1 | tr -d ' ' | tr -d '"')
         gps_time=$(echo "$tpv" | grep "time" | cut -dT -f2 | cut -d. -f1 | cut -d, -f1 | tr -d ' ')
-        lon=$(echo "$tpv" | grep "lon" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
-        lat=$(echo "$tpv" | grep "lat" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
         alt=$(echo "$tpv" | grep "alt" | cut -d: -f2 | cut -d, -f1 | tr -d ' ' | awk '{print int($1)}')
         spd=$(echo "$tpv" | grep "speed" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
         track=$(echo "$tpv" | grep "track" | cut -d: -f2 | cut -d, -f1 | tr -d ' ' | awk '{print int($1)}')
