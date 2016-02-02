@@ -312,7 +312,7 @@ do
                                 ping_result_mdev="0"
                         fi
                         
-                        echo -ne "\nNOTE: Running iPerf test..."
+                        echo -ne "\nNOTE: Running iPerf test for $iperf_test_interval seconds..."
                         iperf_result=`$iperf_bin $iperf_mode -c $iperf_server -r -t $iperf_test_interval --reportstyle C`
 
                         echo -e "Ok\n"
