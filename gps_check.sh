@@ -71,6 +71,8 @@ do
                 fi
         done
         
+        echo "Ok\n"
+        
         gps_date=$(echo "$tpv" | grep "time" | cut -d: -f2 | cut -dT -f1 | cut -d, -f1 | tr -d ' ' | tr -d '"')
         gps_time=$(echo "$tpv" | grep "time" | cut -dT -f2 | cut -d. -f1 | cut -d, -f1 | tr -d ' ')
         alt=$(echo "$tpv" | grep "alt" | cut -d: -f2 | cut -d, -f1 | tr -d ' ' | awk '{print int($1)}')
@@ -89,9 +91,14 @@ do
         echo -e "Speed:\t\t$spd km/h"
         echo -e "Track:\t\t$track Degrees"
 
-        echo -e "Sleeping for $update_interval seconds..."
+        echo -e "\nNOTE: Sleeping for $update_interval seconds..."
+        update_interval_tmp="$update_interval"
+        while [ $update_interval_tmp -gt 0 ]; do
+                echo -ne "$update_interval_tmp...\033[0K\r"
+                sleep 1
+                : $((update_interval_tmp--))
+        done
         echo "--------------------------------------------------------------------------------"
-        sleep $update_interval
 
         # Clear all vars
         unset tpv
