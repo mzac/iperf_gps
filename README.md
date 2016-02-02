@@ -28,20 +28,34 @@ root@pi:~# cp config.ini.default config.ini
 root@pi:~# ./iperf_gps.sh
 
 Usage:
-./iperf_gps.sh -i <server_ip> -w <base_filename>
+./iperf_gps.sh -i [server_ip]
+
+Required:
+
+-i [server_ip]          IP Address of the iPerf Server
+
+Optional:
+
+-h                      This help
+-m                      Run through tests manually (no sleep)
+-p [port]               iPerf port to connect to (default is 5001)
+-s [seconds]            Sleep interval between tests (default is 10 seconds)
+-t [seconds]            How long to run iPerf test (default is 5 seconds)
+-u                      Run iPerf with UDP tests (default is TCP)
+-w [base_filename]      Text that will be included in the filename
 
 ```
 
 ## Example:
 
 ```
-root@pi:~# ./iperf_gps.sh -i 10.0.0.10 -w vehicle1
+root@pi:~# ./iperf_gps.sh -i 10.0.0.10
 
 --------------------------------------------------------------------------------
 NOTE: Verify if have Wifi...No Wifi interfaces found!
 NOTE: Running ICMP ping to see if server is alive...Ok
 NOTE: Running Netcat test to see if iPerf is up on server...Ok
-NOTE: Writing CSV data to 10.0.0.10-vehicle1-2016-01-29T16:35:43+0000.csv
+NOTE: Writing CSV data to 10.0.0.10-2016-01-29T16:35:43+0000.csv
 --------------------------------------------------------------------------------
 ```
 
