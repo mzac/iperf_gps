@@ -32,7 +32,7 @@ update_interval=10
 iperf_port=5001
 
 # How long to run the iPerf test
-iperf_time=5
+iperf_test_interval=5
 
 # Set manual run to 0
 manual_run=0
@@ -54,7 +54,7 @@ while getopts ":i:p:s:t:w:hmu" opts; do
                 update_interval=${OPTARG}
                 ;;
         t)
-                iperf_time=${OPTARG}
+                iperf_test_interval=${OPTARG}
                 ;;
         u)
                 iperf_mode="-u"
