@@ -10,7 +10,7 @@ fi
 usage() {
         echo -e "\nUsage:"
         echo -e "-h\t\t\tThis help"
-        echo -e "-s [seconds]\t\tSleep interval between tests (default is 10 seconds)"
+        echo -e "-s [seconds]\t\tSleep interval between tests (default is 10 seconds)\n"
         exit 0
 }
 
@@ -36,7 +36,7 @@ done
 if [ -e ./config.ini ]; then
         source ./config.ini
 else
-        echo -e "\nWARNING: config.ini not found, using defaults!";
+        echo -e "\nWARNING: config.ini not found, using defaults!\n";
         source ./config.ini.default
 fi
 
