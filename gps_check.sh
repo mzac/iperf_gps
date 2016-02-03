@@ -60,7 +60,7 @@ do
         echo -ne "Looking for current location..."
         while true
         do
-                tpv=$($gpspipe_bin -w -n 5 | grep -m 1 TPV | python -mjson.tool)
+                tpv=$($gpspipe_bin -w -n 5 | grep -m 1 TPV | python -mjson.tool 2>/dev/null)
                 lon=$(echo "$tpv" | grep "lon" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
                 lat=$(echo "$tpv" | grep "lat" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
                 
