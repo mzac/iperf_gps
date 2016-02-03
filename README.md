@@ -27,6 +27,17 @@ root@pi:~# cd iperf_gps
 root@pi:~# cp config.ini.default config.ini
 ```
 
+## Configuration:
+Using your favorite editor (ex. nano, vi) edit the file config.ini and change any settings if needed.
+
+```
+# Location of iPerf binary
+iperf_bin="/usr/bin/iperf"
+
+# Location of gpspipe binary
+gpspipe_bin="/usr/bin/gpspipe"
+```
+
 ## Usage:
 ```
 root@pi:~# ./iperf_gps.sh
