@@ -28,7 +28,7 @@ root@pi:~# cp config.ini.default config.ini
 ```
 
 ## Configuration:
-Using your favorite editor (ex. nano, vi) edit the file 'config.ini' and change any settings if needed.
+Using your favorite editor (ex. nano, vi) edit the file `config.ini` and change any settings if needed.
 
 ```
 # Location of iPerf binary
