@@ -49,7 +49,7 @@ fi
 # Verify if gpsd is running
 gpsd_pid=`ps cax | grep gpsd`
 if [ $? -ne 0 ]; then
-        echo "\nERROR: GPSD is not running, please make sure to start it!\n"
+        echo -e "\nERROR: GPSD is not running, please make sure to start it!\n"
         exit 1
 fi
 
