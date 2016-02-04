@@ -335,10 +335,13 @@ do
                         iperf_result_client_bps=$(echo "$iperf_result_client" | cut -d, -f9)
                         iperf_result_server_bps=$(echo "$iperf_result_server" | cut -d, -f9)
                         
+                        iperf_result_client_mbps=`echo $iperf_result_client_bps | awk '{print int($1 * 1000000)}'`
+                        iperf_result_server_mbps=`echo $iperf_result_client_bps | awk '{print int($1 * 1000000)}'`
+                        
                         echo -e "iPerf Client Bytes:\t$iperf_result_client_bytes"
                         echo -e "iPerf Server Bytes:\t$iperf_result_server_bytes"
-                        echo -e "iPerf Client BPS:\t$iperf_result_client_bps"
-                        echo -e "iPerf Server BPS\t$iperf_result_server_bps"
+                        echo -e "iPerf Client BPS:\t$iperf_result_client_bps / $iperf_result_client_mbps Mbit/s"
+                        echo -e "iPerf Server BPS\t$iperf_result_server_bps / $iperf_result_server_mbps Mbit/s"
                 fi
                 echo -ne "\nNOTE: Writing results to file [$export_file_name] ... "
                 echo "$test_id,$gps_date,$gps_time,$lon,$lat,$alt,$spd,$track,$iperf_server,$wifi_bssid,$wifi_ssid,$wifi_freq,$wifi_signal,$wifi_tx_rate,$wifi_rx_rate,$ping_result_min,$ping_result_avg,$ping_result_max,$ping_result_mdev,$iperf_test_interval,$iperf_result_client_bytes,$iperf_result_client_bps,$iperf_result_server_bytes,$iperf_result_server_bps" >> $export_file_name
@@ -400,5 +403,7 @@ do
         unset iperf_result_server_bytes
         unset iperf_result_client_bps
         unset iperf_result_server_bps
+        unset iperf_result_client_mbps
+        unset iperf_result_server_mbps
 
 done
