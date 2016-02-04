@@ -336,7 +336,7 @@ do
                         iperf_result_server_bps=$(echo "$iperf_result_server" | cut -d, -f9)
                         
                         iperf_result_client_mbps=`echo $iperf_result_client_bps | awk '{print int($1 / 1000000)}'`
-                        iperf_result_server_mbps=`echo $iperf_result_client_bps | awk '{print int($1 / 1000000)}'`
+                        iperf_result_server_mbps=`echo $iperf_result_server_bps | awk '{print int($1 / 1000000)}'`
                         
                         echo -e "iPerf Client Bytes:\t$iperf_result_client_bytes"
                         echo -e "iPerf Server Bytes:\t$iperf_result_server_bytes"
