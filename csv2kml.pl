@@ -10,6 +10,20 @@ my $csv = Text::CSV->new();
 open(CSVFILE, "<", $o_csv_file) || die("Could not open file!");
 
 while(<CSVFILE> {
+        s/#.*//;
+        next if /^(\s)*$/;
+        chomp;
+        push @lines, $_;
+
+        if ($csv->parse($_)) {
+                my @columns = $csv->fields();
+                $server_name    = $columns[0];
+                $server_ip      = $columns[1];
+        } else {
+                my $err = $csv->error_input;
+                print "Failed to parse line: $err";
+        }
+
 }
 
 close(CSVFILE);
