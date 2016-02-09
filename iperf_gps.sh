@@ -176,7 +176,7 @@ echo -e "NOTE: Writing CSV data to $export_file_name"
 echo "--------------------------------------------------------------------------------"
 
 # Print CSV header to file
-echo "test_id,date,time,longitude,latitude,altitude,speed,track,iperf_server,wifi_bssid,wifi_ssid,wifi_freq,wifi_signal,wifi_tx_rate,wifi_rx_rate,ping_min,ping_avg,ping_max,ping_mdev,iperf_test_interval,iperf_client_bytes,iperf_client_bps,iperf_server_bytes,iperf_server_bps" > $export_file_name
+echo "test_id,date,time,latitude,longitude,altitude,speed,track,iperf_server,wifi_bssid,wifi_ssid,wifi_freq,wifi_signal,wifi_tx_rate,wifi_rx_rate,ping_min,ping_avg,ping_max,ping_mdev,iperf_test_interval,iperf_client_bytes,iperf_client_bps,iperf_server_bytes,iperf_server_bps" > $export_file_name
 
 # Set test_id to zero
 test_id=1
@@ -189,10 +189,10 @@ do
         while true
         do
                 tpv=$($gpspipe_bin -w -n 5 | grep -m 1 TPV | python -mjson.tool 2>/dev/null)
-                lon=$(echo "$tpv" | grep "lon" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
                 lat=$(echo "$tpv" | grep "lat" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
+                lon=$(echo "$tpv" | grep "lon" | cut -d: -f2 | cut -d, -f1 | tr -d ' ')
                 
-                if [ ! -z "$lon" -a ! -z "$lat" ]; then
+                if [ ! -z "$lat" -a ! -z "$lon" ]; then
                         break
                 else
                         echo -ne "."
@@ -200,7 +200,7 @@ do
         done
 
         # Check if lon and lat are set
-        if [ ! -z "$lon" -a ! -z "$lat" ]; then
+        if [ ! -z "$lat" -a ! -z "$lon" ]; then
                 
                 # If location found
                 echo "Ok"
@@ -240,8 +240,8 @@ do
                 # Print GPS Results
                 echo -e "\nGPS Date:\t\t$gps_date"
                 echo -e "GPS Time:\t\t$gps_time"
-                echo -e "GPS Longitude:\t\t$lon"
                 echo -e "GPS Latitude:\t\t$lat"
+                echo -e "GPS Longitude:\t\t$lon"
                 echo -e "GPS Altitude:\t\t$alt Meters"
                 echo -e "GPS Speed:\t\t$spd km/h"
                 echo -e "GPS Track:\t\t$track Degrees\n"
@@ -344,7 +344,7 @@ do
                         echo -e "iPerf Server BPS:\t$iperf_result_server_bps / $iperf_result_server_mbps Mbit/s"
                 fi
                 echo -ne "\nNOTE: Writing results to file [$export_file_name] ... "
-                echo "$test_id,$gps_date,$gps_time,$lon,$lat,$alt,$spd,$track,$iperf_server,$wifi_bssid,$wifi_ssid,$wifi_freq,$wifi_signal,$wifi_tx_rate,$wifi_rx_rate,$ping_result_min,$ping_result_avg,$ping_result_max,$ping_result_mdev,$iperf_test_interval,$iperf_result_client_bytes,$iperf_result_client_bps,$iperf_result_server_bytes,$iperf_result_server_bps" >> $export_file_name
+                echo "$test_id,$gps_date,$gps_time,$lat,$lon,$alt,$spd,$track,$iperf_server,$wifi_bssid,$wifi_ssid,$wifi_freq,$wifi_signal,$wifi_tx_rate,$wifi_rx_rate,$ping_result_min,$ping_result_avg,$ping_result_max,$ping_result_mdev,$iperf_test_interval,$iperf_result_client_bytes,$iperf_result_client_bps,$iperf_result_server_bytes,$iperf_result_server_bps" >> $export_file_name
                 if [ $? -eq 0 ]; then
                         echo "Ok"
                         ((test_id++))
