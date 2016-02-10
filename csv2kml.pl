@@ -116,11 +116,14 @@ if (defined($o_kml_file)) {
 
 	print "Sending output to KML file: $o_kml_file\n";
 	
-	open KMLFILE, ">>$o_kml_file"
+	open KMLFILE, ">$o_kml_file"
 		or die $!;
 	print KMLFILE "$kml_output";
 	close (KMLFILE);
 }
+
+print "\nAll done!\n";
+exit;
 
 sub usage {
         print "\nUsage:\n";
