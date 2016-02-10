@@ -140,7 +140,7 @@ sub check_options {
                 'c:s'   => \$o_csv_file,        'csv:s'         => \$o_csv_file,
                 'h'     => \$o_help,            'help'          => \$o_help,
                 't'	=> \$o_termbin,		'termbin'	=> \$o_termbin,
-		'w'	=> \$o_kml_file,	'output'	=> \$o_kml_file,
+		'w:s'	=> \$o_kml_file,	'output:s'	=> \$o_kml_file,
         );
 
         if (defined $o_help || not defined $o_csv_file) {
