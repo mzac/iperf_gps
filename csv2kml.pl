@@ -17,6 +17,7 @@ while(<CSVFILE>) {
         s/#.*//;
         next if /^(\s)*$/;
         chomp;
+        next if ($. == 1); # Skip first line
         push @lines, $_;
 
         if ($csv->parse($_)) {
@@ -112,6 +113,7 @@ sub usage {
         print "\nOptional:\n";
         print "-h\t\t\tThis help\n";
         print "-t\t\t\tSend output to termbin.com\n";
+        print "\n";
 }
 
 sub check_options {
