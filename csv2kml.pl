@@ -109,6 +109,8 @@ if (defined($o_termbin)) {
 if (defined($o_kml_file)) {
 	my $kml_ext = $o_kml_file =~ /((\.[^.\s]+)+)$/;
 	
+	print "$kml_ext";
+	
 	if ($kml_ext ne '.kml') {
 		$o_kml_file	= $o_kml_file
 				. ".kml";
@@ -122,7 +124,7 @@ if (defined($o_kml_file)) {
 	close (KMLFILE);
 }
 
-print "\nAll done!\n";
+print "\nAll done!\n\n";
 exit;
 
 sub usage {
