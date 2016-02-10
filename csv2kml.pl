@@ -60,6 +60,7 @@ while(<CSVFILE>) {
                                 . "\t\t\t<Placemark>\n"
                                 . "\t\t\t\t<Name>ID: $test_id</Name>\n"
                                 . "\t\t\t\t<ExtendedData>\n"
+                                . "\t\t\t\t\t<Data name=\"description\"><value>Test $test_id</value></Data>\n"
                                 . "\t\t\t\t\t<Data name=\"Test ID\"><value>$test_id</value></Data>\n"
                                 . "\t\t\t\t\t<Data name=\"Test Date\"><value>$test_date</value></Data>\n"
                                 . "\t\t\t\t\t<Data name=\"Test Time\"><value>$test_time</value></Data>\n"
