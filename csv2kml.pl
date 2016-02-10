@@ -109,6 +109,9 @@ sub usage {
         print "$0 -c <csv_file>\n\n";
         print "Required:\n";
         print "-c [csv_file]\t\tThe CSV file you want to convert\n";
+        print "\nOptional:\n";
+        print "\n-h\t\t\tThis help\n
+        print "\n-t\t\t\tSend output to termbin.com\n";
 }
 
 sub check_options {
