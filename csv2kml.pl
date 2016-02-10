@@ -4,6 +4,12 @@ use strict;
 use Getopt::Long;
 use Text::CSV;
 
+# Define Global Vars
+my $o_csv_file;
+my $o_help;
+my $o_kml_file;
+my $o_termbin;
+
 check_options();
 
 my $csv = Text::CSV->new();
