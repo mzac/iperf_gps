@@ -89,8 +89,8 @@ while(<CSVFILE>) {
 }
 
 $kml_output	= $kml_output
-		. "\t<Document>\n"
-		. "<kml>\n";
+		. "\t</Document>\n"
+		. "</kml>\n";
 
 close(CSVFILE);
 
