@@ -11,7 +11,7 @@ open(CSVFILE, "<", $o_csv_file) || die("Could not open file!");
 
 my $kml_output  = "<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n"
                 . "\t<Document>\n"
-                . "\t\t<Name>$o_csv_file</name>\n";
+                . "\t\t<Name>$o_csv_file</Name>\n";
 
 while(<CSVFILE>) {
         s/#.*//;
