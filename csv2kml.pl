@@ -95,7 +95,7 @@ close(CSVFILE);
 
 if (defined($o_termbin)) {
 	print "Sending output to termbin.com...\n";
-	my $termbin_output = `echo $kml_output | /bin/nc 9999`;
+	my $termbin_output = qx/echo $kml_output | /bin/nc termbin.com 9999/;
 	print "$termbin_output\n";
 	exit;
 } else {
@@ -118,7 +118,7 @@ sub check_options {
                 't'	=> \$o_termbin,		'termbin'	=> \$o_termbin,
         );
 
-        if (defined($o_help)) {
+        if (not defined ($o_csv_file) || defined($o_help)) {
                 usage();
                 exit;
         }
