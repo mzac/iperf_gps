@@ -96,10 +96,14 @@ close(CSVFILE);
 
 if (defined($o_termbin)) {
 	print "Sending output to termbin.com...\n";
-	my $termbin_cmd = 'echo $kml_output \| /bin/nc termbin.com 9999';
-	my $termbin_output = system($termbin_cmd);
-	print "$termbin_cmd\n";
-	print "$termbin_output\n";
+#	my $termbin_cmd = 'echo -e $kml_output | /bin/nc termbin.com 9999';
+
+	open TERMBIN, "| /bin/nc termbin.com 9999"
+		or die "can't fork: $!";
+	local $SIG{PIPE} = sub { die "termbin pipe broke" };
+	print TERMBIN "$kml_output";
+	close TERMBIN or die "bad termbin: $! $?";
+
 	exit;
 } else {
 	print "$kml_output";
