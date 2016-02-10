@@ -94,20 +94,32 @@ $kml_output	= $kml_output
 
 close(CSVFILE);
 
+print "$kml_output";
+
 if (defined($o_termbin)) {
 	print "Sending output to termbin.com...\n";
-#	my $termbin_cmd = 'echo -e $kml_output | /bin/nc termbin.com 9999';
 
 	open TERMBIN, "| /bin/nc termbin.com 9999"
 		or die "can't fork: $!";
 	local $SIG{PIPE} = sub { die "termbin pipe broke" };
 	print TERMBIN "$kml_output";
 	close TERMBIN or die "bad termbin: $! $?";
+}
 
-	exit;
-} else {
-	print "$kml_output";
-	exit;
+if (defined($o_kml_file)) {
+	my $kml_ext = $o_kml_file =~ /((\.[^.\s]+)+)$/;
+	
+	if ($kml_ext ne '.kml') {
+		$o_kml_file	= $o_kml_file
+				. ".kml";
+	}
+
+	print "Sending output to KML file: $o_kml_file\n";
+	
+	open KMLFILE, ">>$o_kml_file"
+		or die $!;
+	print KMLFILE "$kml_output";
+	close (KMLFILE);
 }
 
 sub usage {
@@ -118,6 +130,7 @@ sub usage {
         print "\nOptional:\n";
         print "-h\t\t\tThis help\n";
         print "-t\t\t\tSend output to termbin.com\n";
+        print "-w [kml_file]\t\tWrite KML to file\n";
         print "\n";
 }
 
@@ -127,6 +140,7 @@ sub check_options {
                 'c:s'   => \$o_csv_file,        'csv:s'         => \$o_csv_file,
                 'h'     => \$o_help,            'help'          => \$o_help,
                 't'	=> \$o_termbin,		'termbin'	=> \$o_termbin,
+		'w'	=> \$o_kml_file,	'output'	=> \$o_kml_file,
         );
 
         if (defined $o_help || not defined $o_csv_file) {
