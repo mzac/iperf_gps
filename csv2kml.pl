@@ -9,8 +9,9 @@ my $csv = Text::CSV->new();
 
 open(CSVFILE, "<", $o_csv_file) || die("Could not open file!");
 
-my $kml_output  = "<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n";
-print "$kml_output";
+my $kml_output  = "<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n"
+                . "\t<Document>\n"
+                . "\t\t<Name>$o_csv_file</name>\n";
 
 while(<CSVFILE>) {
         s/#.*//;
@@ -44,6 +45,41 @@ while(<CSVFILE>) {
                 $iperf_client_bps	= $columns[21];
                 $iperf_server_bytes	= $columns[22];
                 $iperf_server_bps	= $columns[23];
+                
+                $kml_output     = $kml_output
+                                . "\t\t\t<Placemark>\n"
+                                . "\t\t\t\t<Name>ID: $test_id</Name>\n"
+                                . "\t\t\t\t<ExtendedData>\n"
+                                . "\t\t\t\t\t<Data name="Test ID">      	<value>$test_id</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="Test Date">    	<value>$test_date</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="Test Time">    	<value>$test_time</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="Latitude">     	<value>$latitude</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="Longitude">    	<value>$longitude</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="Altitude">     	<value>$altitude</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="Speed">		<value>$speed</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="Track">		<value>$track</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="iPerf Server"> 	<value>$iperf_server</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="WiFi BSSID">		<value>$wifi_bssid</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="WiFi SSID">		<value>$wifi_ssid</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="WiFi Freq">		<value>$wifi_freq</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="WiFi Signal">		<value>$wifi_signal</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="WiFi TX Rate">		<value>$wifi_tx_rate</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="WiFi RX Rate">		<value>$wifi_rx_rate</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="Ping Min">		<value>$ping_min</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="Ping Avg">		<value>$ping_avg</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="Ping Max">		<value>$ping_max</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="Ping mdev">		<value>$ping_mdev</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="iPerf Test Interval">	<value>$iperf_test_interval</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="iPerf Client Bytes">	<value>$iperf_client_bytes</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="iPerf Client BPS">	<value>$iperf_client_bps</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="iPerf Server Bytes">	<value>$iperf_server_bytes</value></Data>\n"
+                                . "\t\t\t\t\t<Data name="iPerf Server BPS">	<value>$iperf_server_bps</value></Data>\n"
+                                . "\t\t\t\t</ExtendedData>\n"
+                                . "\t\t\t\t<Point>\n"
+                                . "\t\t\t\t\t<coordinates>$latitude,$longitude</coordinates>\n"
+                                . "\t\t\t\t</Point>\n"
+                                . "\t\t\t</Placemark>\n";
+                                
         } else {
                 my $err = $csv->error_input;
                 print "Failed to parse line: $err";
@@ -51,7 +87,13 @@ while(<CSVFILE>) {
 
 }
 
+$kml_output	= $kml_output
+		. "\t<Document>\n"
+		. "<kml>\n";
+
 close(CSVFILE);
+
+print "$kml_output";
 
 sub usage {
         print "\nUsage:\n";
