@@ -124,7 +124,7 @@ sub check_options {
                 't'	=> \$o_termbin,		'termbin'	=> \$o_termbin,
         );
 
-        if (not defined ($o_csv_file) || defined($o_help)) {
+        if (defined $o_help || not defined $o_csv_file) {
                 usage();
                 exit;
         }
