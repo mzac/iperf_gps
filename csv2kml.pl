@@ -93,7 +93,15 @@ $kml_output	= $kml_output
 
 close(CSVFILE);
 
-print "$kml_output";
+if (defined($o_termbin)) {
+	print "Sending output to termbin.com...\n";
+	my $termbin_output = `echo $kml_output | /bin/nc 9999`;
+	echo "$termbin_output\n";
+	exit;
+} else {
+	print "$kml_output";
+	exit;
+}
 
 sub usage {
         print "\nUsage:\n";
@@ -105,8 +113,9 @@ sub usage {
 sub check_options {
         Getopt::Long::Configure ("bundling");
         GetOptions(
-                'h'     => \$o_help,            'help'          => \$o_help,
                 'c:s'   => \$o_csv_file,        'csv:s'         => \$o_csv_file,
+                'h'     => \$o_help,            'help'          => \$o_help,
+                't'	=> \$o_termbin,		'termbin'	=> \$o_termbin,
         );
 
         if (defined($o_help)) {
