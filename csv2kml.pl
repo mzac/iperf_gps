@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+use strict;
 use Getopt::Long;
 use Text::CSV;
 
@@ -22,30 +23,30 @@ while(<CSVFILE>) {
 
         if ($csv->parse($_)) {
                 my @columns = $csv->fields();
-                $test_id        	= $columns[0];
-                $test_date      	= $columns[1];
-                $test_time      	= $columns[2];
-                $latitude       	= $columns[3];
-                $longitude      	= $columns[4];
-                $altitude       	= $columns[5];
-                $speed          	= $columns[6];
-                $track			= $columns[7];
-                $iperf_server		= $columns[8];
-                $wifi_bssid		= $columns[9];
-                $wifi_ssid		= $columns[10];
-                $wifi_freq		= $columns[11];
-                $wifi_signal		= $columns[12];
-                $wifi_tx_rate		= $columns[13];
-                $wifi_rx_rate		= $columns[14];
-                $ping_min		= $columns[15];
-                $ping_avg		= $columns[16];
-                $ping_max		= $columns[17];
-                $ping_mdev		= $columns[18];
-                $iperf_test_interval	= $columns[19];
-                $iperf_client_bytes	= $columns[20];
-                $iperf_client_bps	= $columns[21];
-                $iperf_server_bytes	= $columns[22];
-                $iperf_server_bps	= $columns[23];
+                my $test_id        	= $columns[0];
+                my $test_date      	= $columns[1];
+                my $test_time      	= $columns[2];
+                my $latitude       	= $columns[3];
+                my $longitude      	= $columns[4];
+                my $altitude       	= $columns[5];
+                my $speed          	= $columns[6];
+                my $track		= $columns[7];
+                my $iperf_server	= $columns[8];
+                my $wifi_bssid		= $columns[9];
+                my $wifi_ssid		= $columns[10];
+                my $wifi_freq		= $columns[11];
+                my $wifi_signal		= $columns[12];
+                my $wifi_tx_rate	= $columns[13];
+                my $wifi_rx_rate	= $columns[14];
+                my $ping_min		= $columns[15];
+                my $ping_avg		= $columns[16];
+                my $ping_max		= $columns[17];
+                my $ping_mdev		= $columns[18];
+                my $iperf_test_interval	= $columns[19];
+                my $iperf_client_bytes	= $columns[20];
+                my $iperf_client_bps	= $columns[21];
+                my $iperf_server_bytes	= $columns[22];
+                my $iperf_server_bps	= $columns[23];
                 
                 $kml_output     = $kml_output
                                 . "\t\t\t<Placemark>\n"
@@ -80,7 +81,6 @@ while(<CSVFILE>) {
                                 . "\t\t\t\t\t<coordinates>$latitude,$longitude</coordinates>\n"
                                 . "\t\t\t\t</Point>\n"
                                 . "\t\t\t</Placemark>\n";
-                                
         } else {
                 my $err = $csv->error_input;
                 print "Failed to parse line: $err";
