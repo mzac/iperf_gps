@@ -9,6 +9,9 @@ my $csv = Text::CSV->new();
 
 open(CSVFILE, "<", $o_csv_file) || die("Could not open file!");
 
+my $kml_output  = "<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n";
+print "$kml_output";
+
 while(<CSVFILE>) {
         s/#.*//;
         next if /^(\s)*$/;
