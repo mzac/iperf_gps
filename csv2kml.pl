@@ -96,7 +96,7 @@ close(CSVFILE);
 if (defined($o_termbin)) {
 	print "Sending output to termbin.com...\n";
 	my $termbin_output = `echo $kml_output | /bin/nc 9999`;
-	echo "$termbin_output\n";
+	print "$termbin_output\n";
 	exit;
 } else {
 	print "$kml_output";
