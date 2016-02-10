@@ -20,6 +20,8 @@ my $kml_output  = "<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n"
                 . "\t<Document>\n"
                 . "\t\t<Name>$o_csv_file</Name>\n";
 
+my @lines;
+
 while(<CSVFILE>) {
         s/#.*//;
         next if /^(\s)*$/;
