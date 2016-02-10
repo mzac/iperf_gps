@@ -9,7 +9,7 @@ my $csv = Text::CSV->new();
 
 open(CSVFILE, "<", $o_csv_file) || die("Could not open file!");
 
-while(<CSVFILE> {
+while(<CSVFILE>) {
         s/#.*//;
         next if /^(\s)*$/;
         chomp;
